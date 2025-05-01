@@ -1,0 +1,283 @@
+package CentralEcu {
+    import Bootstrap
+    import Automotive
+    /*
+      *
+      * 											Basic building blocks
+      * 										----------------------------
+      */
+ 
+    operation void run(){
+        PrintLn("test of VS Code extension: global operation should be clickable");
+    }
+
+    entity SystemBlock : Classifier {
+        @Type = {TypeName = Port;}
+        new slot Ports : Base.Fields;
+    }
+
+    @AutomotiveElement
+    entity CentralEcuElement : SystemBlock {
+        @Cardinality = {Max = 1;}
+        @Type = {TypeName = ASIL;} 
+        @ContractSlot
+        new slot SafetyLevel : Base.Fields;
+
+        @Cardinality = {Max = 1;}
+        @Type = {TypeName = String;}
+        @ContractSlot
+        new slot Brand : Base.Fields;
+    }
+
+    entity Port : Classifier {
+        @Cardinality = {Min = 1; Max = 1;}
+        @Type = {TypeName = Interface;}
+        new slot Interface : Base.Fields;
+    }
+    
+    entity Input : Port {}
+    entity Output : Port {}
+    /*
+    *
+    * 											CentralEcu components
+    * 										--------------------------
+     */
+
+    entity CentralEcuComposition : CentralEcuElement {
+
+        @Type = {TypeName = Interface;} 
+        new slot Interfaces : Base.Fields;
+    }
+
+    entity CentralEcuType : CentralEcuComposition {
+
+        @Cardinality= {Min = 1;}
+        @Type = {TypeName = SoC;}
+        new slot SoCs : Base.Fields;
+
+        @Cardinality= {Min = 1;}
+        @Type = {TypeName = PowerModule;}        
+        new slot PowerModules : Base.Fields;
+    }
+
+    entity SoC : CentralEcuComposition {
+        
+        @Cardinality= {Min = 1;}
+        @Type = {TypeName = Core;}        
+        new slot Cores : Base.Fields;
+
+        @Cardinality= {Min = 1;}
+        @Type = {TypeName = MemoryRegion;}        
+        new slot Memory : Base.Fields;
+    
+        @Cardinality= {Min = 1;}
+        @Type = {TypeName = eSoftware;}        
+        new slot eSoftwares : Base.Fields;
+    }
+
+    entity Mcu : SoC {
+        @Annotation_Omit
+        slot Interfaces = [];
+
+        @Cardinality= {Max = 1;}
+        slot Cores;
+    }
+
+    entity Core : CentralEcuElement {
+
+        @Type = {TypeName = Number;}
+        new slot Frequency : Base.Fields;
+
+        @Cardinality= {Max = 1;}
+        @Type = {TypeName = Bool;}
+        new slot isLockstep : Base.Fields;
+    }
+
+    entity eSoftware : CentralEcuComposition {}
+    entity PowerModule : CentralEcuElement {}
+    entity MemoryRegion : SystemBlock {}
+    entity ROMregion : MemoryRegion {}
+    entity Flashregion : MemoryRegion {}
+
+    // Base elements for model connection
+    entity Interface : CentralEcuElement {
+
+        @Cardinality = {Max = 1;}
+        @Type = {TypeName = Bool;}
+        new slot isPhysical : Base.Fields;
+    }
+
+    operation Bool Connect(SystemBlock from, SystemBlock to, Interface interface){
+        Bool fromConnected = false;
+        Bool toConnected = false;
+        try {
+            foreach (Base attrib in GetAttributes(from)) {
+                if ((attrib is Output) && GetValue(attrib.Interface) == null) {
+                    attrib.Set(Port.Interface,interface);
+                    interface.AddValue(Interface.Ports,attrib);
+                    PrintLn("Connected ${GetID(from)} to ${GetID(interface)}");
+                    fromConnected = true;
+                }
+            }
+            foreach (Base attrib in GetAttributes(to)) {
+                if ((attrib is Input) && GetValue(attrib.Interface) == null) {
+                    attrib.Set(Port.Interface,interface);
+                    interface.AddValue(Interface.Ports,attrib);
+                    PrintLn("Connected ${GetID(to)} to ${GetID(interface)}");
+                    toConnected = true;
+                }
+            }
+            return fromConnected && toConnected;
+        }
+        catch (ValidationException exc){
+            PrintError((exc->Message)!!);
+            return false;
+        }
+    }
+    /*
+     *
+     * 											    Tests
+     * 										---------------------
+     */
+
+    operation Bool Test_ASIL_typeValidation() {
+        Interface RTE_A = Create(Interface).Set(AutomotiveElement.SafetyLevel, "ASIL_A");
+        try {
+            ASIL.Validate(RTE_A->SafetyLevel);
+        }
+        catch (ValidationException exc) {
+            if (exc->ErrorCode == "ASIL_1") return true;
+        }
+        return false;
+    }
+    operation Bool Test_ASIL_valueValidation() {
+        ASIL_A lvl = Create(ASIL_A).Set(ASIL.Value,-1);
+        //PrintEntity(lvl,true);
+        Interface RTE_A = Create(Interface).Set(AutomotiveElement.SafetyLevel, lvl);
+        //PrintEntity(RTE_A,true);
+        try {
+            ASIL.Validate(RTE_A->SafetyLevel);
+        }
+        catch (ValidationException exc) {
+            if (exc->ErrorCode == "ASIL_2") return true;
+        }
+        return false;
+    }
+    operation Bool Test_AutomotiveElement_decompositionCheck() {
+        SoC Core_B = Create(Core).Set(AutomotiveElement.SafetyLevel, ASIL_B);
+        SoC SoC_D = Create(SoC).Set(AutomotiveElement.SafetyLevel, ASIL_D).Set(SoC.Cores,Core_B);
+        try {
+            Base.Validate(SoC_D);
+        }
+        catch (ValidationException exc) {
+            if (exc->ErrorCode == "AutomotiveElement_1") return true;
+        }
+        return false;
+    }
+    operation Bool Test_Connect_validEntities() {
+        Interface MFIS = new Interface;
+        Core? CoreFrom = Create(Core).Set(SystemBlock.Ports, Create(Output));
+        Core? CoreTo = Create(Core).Set(SystemBlock.Ports, Create(Input));
+        Bool connected = false;
+        try{
+            connected = Connect(CoreFrom!!, CoreTo!!, MFIS!!);}
+        catch (ValidationException exc) {
+            PrintLn(exc->Message);
+        }
+        Port? CoreFromOutput = GetValue(CoreFrom.Ports);
+        PrintLn("${GetValue(CoreFrom.Ports)}");
+        PrintLn("${GetValue(CoreFromOutput.Interface)}");
+        if (GetValue(CoreFromOutput.Interface) != MFIS) {PrintError("CoreFrom port interface was not set correctly!"); return false;}
+        return connected;
+    }
+
+    /*
+     *
+     * 											    Example
+     * 										---------------------
+     */
+
+    @MinimumNumberOfMemoryBanks
+    entity RcarH3e : SoC {
+        slot Brand = "Renesas";
+        slot ApplicationCores1 : SoC.Cores = [CA57, CA57, CA57, CA57];
+        slot ApplicationCores2 : SoC.Cores = [CA53, CA53, CA53, CA53];
+        slot RealtimeCore : SoC.Cores = CR7;
+        slot SafetyLevel : AutomotiveElement.SafetyLevel = ASIL_B;
+
+        @ContractSlot
+        slot Memory = [Flashregion, Flashregion, ROMregion];
+    }
+
+    entity CR7 : Core {
+        slot Brand = "Arm";
+        slot Frequency = 800000000;
+        slot isLockstep = true;
+        slot SafetyLevel = ASIL_D;
+    }
+
+    entity CA57 : Core {
+        slot Brand = "Arm";
+        slot Frequency = 1900000000;
+        slot isLockstep = false;
+        slot SafetyLevel = ASIL_B;
+    }
+
+    entity CA53 : Core {
+        slot Brand = "Arm";
+        slot Frequency = 1500000000;
+        slot isLockstep = false;
+        slot SafetyLevel = ASIL_B;
+    }
+
+    entity ACC : eSoftware {
+        slot Brand = "Tier1Supplier-B";
+        slot SafetyLevel = ASIL_B;
+    }
+
+    entity BrakeControl : eSoftware {
+        slot Brand = "Tier1Supplier-B";
+        slot SafetyLevel = ASIL_D;
+    }
+
+    entity SwUpManager : eSoftware {
+        slot Brand = "Tier1Supplier-A";
+        slot SafetyLevel = QM;
+    }
+
+    entity MinimumNumberOfMemoryBanks : AutomotiveRequirement {
+        slot ID = "OTA-1-1";
+        slot SafetyLevel = ASIL_D;
+        slot Text = "The system shall have at least two separate non-volatile memory banks.";
+
+        @Cardinality = {Min = 2;}
+        @Type = {TypeName = MemoryRegion;} 
+        @ContractSlot
+        new slot Memory : Base.Fields;
+    }
+
+    operation Bool Test_Example() {
+        try {
+            Interface SharedMemory = Create(Interface)
+                .Set(AutomotiveElement.SafetyLevel, ASIL_B)
+                .Set(Interface.isPhysical, true);
+
+            SoC SoCdeployment = Create(RcarH3e)
+                .Set(CentralEcuComposition.Channels, SharedMemory)
+                .AddValue(SoC.eSoftwares, ACC)
+                .AddValue(SoC.eSoftwares, BrakeControl)
+                .AddValue(SoC.eSoftwares, SwUpManager)
+                ;
+
+            CentralEcuType DomainController = Create(CentralEcuType)
+                .Set(AutomotiveElement.Brand, "Tier1Supplier-A")
+                .Set(CentralEcuType.SoCs, SoCdeployment);
+            ValidateSelf(DomainController);
+            return true;
+        }
+        catch (ValidationException exc) {
+            PrintError((exc->Message)!!);
+            return false;
+        }
+    }
+}

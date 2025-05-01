@@ -1,0 +1,101 @@
+package Automotive {
+    import Bootstrap
+
+    // ASIL as enum 
+    entity ASIL : Classifier {
+        @Cardinality = {Min = 1; Max = 1;}
+        @Type = {TypeName = Number;}//1...5 QM, A..., D
+        new slot Value : Base.Fields;
+
+		override operation void Validate(Object subject, Base? context=null) {
+            if (!(subject is ASIL))
+                throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = null;
+                    Instances =  new Base[];
+                    Category = "Automotive/ASIL";
+                    ErrorCode = "ASIL_1";
+                    Message = "Instance is not an ASIL.";
+                };
+    
+            Number? safetyLevelValue = subject.Get(ASIL.Value);
+            if (safetyLevelValue != null) {
+                Bool isASILvalue = false;
+                foreach (ASIL lvl in GetInstances(ASIL, false)) { // collect valid ASIL definitions
+                    Base? meta = GetMeta(subject);
+                    if (meta != null && lvl == meta && lvl->Value == safetyLevelValue!!) { // and search for valid value
+                        isASILvalue = true;
+                        continue;
+                    }
+                }
+                if (!isASILvalue)
+                    throw new ValidationException {
+                        ValidationSource = this;
+                        Meta = GetMeta(this);
+                        Instances = new Base[subject];
+                        Category = "Automotive/ASIL";
+                        ErrorCode = "ASIL_2";
+                        Message = "An ASIL value shall be an integer between 0 and 4 (0: QM, ... 4: ASIL D) - Violated ( Safety level ${safetyLevelValue!!} )";
+                    };
+            }
+        }
+    }
+
+    entity QM : ASIL {slot Value = 0;}
+    entity ASIL_A : ASIL {slot Value = 1;}
+    entity ASIL_B : ASIL {slot Value = 2;}
+    entity ASIL_C : ASIL {slot Value = 3;}
+    entity ASIL_D : ASIL {slot Value = 4;}
+
+    // Automotive concepts enforced as contracts
+    entity AutomotiveElement : Contract {
+
+        @Cardinality = {Max = 1;}
+        @Type = {TypeName = ASIL;} 
+        @ContractSlot
+        new slot SafetyLevel : Base.Fields;
+
+        @Cardinality = {Max = 1;}
+        @Type = {TypeName = String;}
+        @ContractSlot
+        new slot Brand : Base.Fields;
+
+        override operation Bool Check(Base definedFor, Object appliesOn, Base? containerContext) {
+            //PrintEntity(appliesOn!!);
+            //PrintEntity(definedFor!!);
+            ASIL? safetyLevelComposition = appliesOn.GetAttributeByType(ASIL,true,true);
+            if (safetyLevelComposition == null) return true; //nothing to check then!
+            //PrintLn("${safetyLevelComposition.Value}");
+            foreach (Base attrib in GetAttributes(appliesOn!!)) {
+                if (!(attrib is Entity)) continue; //nothing to check then!
+                Base? metaAttrib = GetMeta(attrib);
+                Number? safetyLevelValuePart = attrib.GetAttributeByType(ASIL.Value);
+                if (safetyLevelValuePart == null) continue; //nothing to check then!
+                //PrintLn("${safetyLevelValuePart!!}");
+                if (safetyLevelComposition.Value > safetyLevelValuePart + 1) {
+                    throw new ValidationException {
+                        ValidationSource = this;
+                        Meta = GetMeta(this);
+                        Instances = new Base[appliesOn];
+                        Category = "Automotive/AutomotiveElement";
+                        ErrorCode = "AutomotiveElement_1";
+                        Message = "The ASIL value of a composition cannot be more that two levels higher than of it parts - Decomposition rules violated ( composition: ${safetyLevelComposition.Value} vs part: ${safetyLevelValuePart!!} )";
+                    };
+                    return false;
+                }
+            }
+            return true;
+        }
+    }
+
+    entity AutomotiveRequirement : AutomotiveElement {
+
+        @Cardinality = {Min = 1; Max = 1;}
+        @Type = {TypeName = String;}
+        new slot ID : Base.Fields;
+
+        @Cardinality = {Max = 1;}
+        @Type = {TypeName = String;}
+        new slot Text : Base.Fields;
+    }
+}

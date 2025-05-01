@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<UMLProfile profiletype="uml2">
+	<Documentation id="DC7A8039-A" name="Automotive" version="1.0.0" notes="Automotive"/>
+	<Content>
+		<Stereotypes>
+			<Stereotype name="AutomotiveElement" notes="" cx="700" cy="107" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="SysML1.4::block" baseStereotypes="SysML1.4::block">
+				<TaggedValues>
+					<Tag name="Brand" type="" description="" unit="" values="" default=""/>
+					<Tag name="SafetyLevel" type="enumeration" description="" unit="" values="QM,ASIL A,ASIL B,ASIL C,ASIL D" default="QM"/>
+				</TaggedValues>
+				<Constraints>
+					<Constraint name="context AutomotiveElement inv SafetyOfParts: self.ownedElements-&gt;forAll(p|exists(p.SafetyLevel) implies self.SafetyLevel &lt;= p.SafetyLevel+1)" type="OCL" description="" weight="0"/>
+				</Constraints>
+			</Stereotype>
+			<Stereotype name="AutomotiveRequirement" notes="" cx="175" cy="82" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="SysML1.4::requirement" baseStereotypes="SysML1.4::requirement">
+				<TaggedValues>
+					<Tag name="SafetyLevel" type="enumeration" description="" unit="" values="QM,ASIL A,ASIL B,ASIL C,ASIL D" default="QM"/>
+				</TaggedValues>
+			</Stereotype>
+		</Stereotypes>
+		<TaggedValueTypes/>
+		<ViewDefinitions/>
+		<Metamodel/>
+	</Content>
+</UMLProfile>
