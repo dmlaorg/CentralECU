@@ -1,0 +1,976 @@
+package Bootstrap{
+
+	/*
+		Built-in operations
+		-------------------
+	*/
+	operation Bool IsPrimitiveLiteral(Object subject){
+		return subject is Bool||subject is String||subject is Number;
+	}
+
+	operation void PrintError(String errorMsg){
+		PrintLn(errorMsg, "red");
+	}
+
+	operation void PrintLn_(String msg, Number n){
+        for(Number i=0;i<n;i++)
+            Print("\t");
+        PrintLn(msg);
+    }
+
+    operation void PrintEntity(Base subject, Bool withHierarchy=false, Number level=0){
+        _PrintAnnotations(subject, level);
+        PrintLn_("|- ${GetID(subject)}", level);		
+		_PrintSlots(subject, withHierarchy, level+1);
+    }
+
+    operation void _PrintSlots(Base subject, Bool withHierarchy, Number level)
+	{
+		foreach(Base attrib in subject.GetAllSlots(withHierarchy))
+		{
+            _PrintAnnotations(attrib, level);            
+            if (GetValues(attrib)!=null)
+			{
+				Object[] values = GetValues(attrib)!!;
+				PrintLn_("|- ${GetLocalID(attrib)}: ${GetID(GetMeta(attrib))}=", level);
+				foreach(Object value in values){
+					if (value is Base) {
+						PrintEntity(value!!, withHierarchy, level+1);
+					}
+					else
+						PrintLn_("|- ${value}", level+1);
+				}
+            }
+            else
+       			PrintLn_("|- ${GetLocalID(attrib)}", level);
+		}
+	}
+
+    operation void _PrintAnnotations(Base subject, Number level){
+        String AnnotationString="";
+		foreach(Base attrib in GetAttributes(subject))
+		{
+			if (attrib is Annotation)
+			{
+                if (AnnotationString!="") AnnotationString=AnnotationString+"; ";
+                else AnnotationString=" ";
+                String AttribString="";
+                //TODO: Remove omit handling
+                if (attrib is Annotation_Omit)
+                    AnnotationString=AnnotationString+"@Omit";
+                else
+				    AnnotationString=AnnotationString+"@${GetLocalID(GetMeta(attrib))}";
+				foreach(Slot s in attrib.GetAllSlots(false)){
+                    if (GetValue(s)!=null){
+                        if (AttribString=="") AttribString="(";
+                        else AttribString=AttribString+", ";
+                        Object value=GetValue(s)!!;
+                        AttribString=AttribString+"${GetLocalID(s)}: ${value is Base?GetID(value):value}";
+                    }
+                }
+                if (AttribString!="") AnnotationString=AnnotationString+("${AttribString})");
+			}
+		}		
+        if (AnnotationString!="") PrintLn_("| ${AnnotationString}", level);
+    }
+
+
+
+	operation Number Number_MAX() {
+        return 1000;
+    }
+
+    operation String? ValidateSelf(Base subject) {
+		if (subject==Base) return null;
+		if (subject is Slot) return null;
+		return ValidateGlobal(GetMeta(subject)!!, subject, null);
+ 	}
+
+	//Grants that all validations are called along the meta-chain
+	//Requires the metaEntity
+	operation String? ValidateGlobal(Base metaEntity, Object subject, Base? context){
+	    try {   
+				Base? currentMeta = metaEntity;
+		        while (currentMeta != null) {
+					//Check whether the entity overrides Validation, if not, we do not call Validate, since it will be called later.
+					//Base has a validate, thus at the worst case, Base will Validate the entity.
+				   	currentMeta!!.Validate(subject, context);
+					currentMeta = GetMeta(currentMeta!!);
+                }     
+            }
+            catch (ValidationException exc) {
+			    return "${exc->Message}"
+					   //#${exc->ErrorCode}# [Src: ${GetID((exc->ValidationSource)!!)} Meta: ${exc->Meta==null?null:GetID((exc->Meta)!!)}  Inst: ${exc->Instances==null?null:GetID((exc->Instances)!!)}]"
+				+((exc->InnerException==null)?"":" (${exc->InnerException})");
+            }
+
+	    return null;
+	}
+
+	operation void ValidateAll() {
+
+        foreach (Base ent in GetInstances(Base, true)) {
+			String? errorMsg = ValidateSelf(ent);
+			if (errorMsg!=null)
+				PrintError("ERROR: ${GetID(ent)} is invalid: ${errorMsg}\n\r");
+
+            try {
+                ent.ValidateGamma();
+            }  catch (ValidationException exc) {
+                PrintError("ERROR: '${exc->Message}'\n\r");
+				// [Code: ${exc->ErrorCode}] '${exc->Message}' [Src: ${GetID((exc->ValidationSource)!!)} Meta: ${exc->Meta==null?null:GetID((exc->Meta)!!)}  Inst: ${exc->Instances==null?null:GetID((exc->Instances)!!)}]", "red");
+            }
+        }
+    }
+
+	//newID == null - does not work :o
+	operation Base Create(Base metaEntity, String? newID = null) {
+        //Cloned attributes are not included in the new instance, thus
+        //there is no need to clone fields and operations
+        //there is no need to clone constraints and Annotations
+	    return CreateEntity(newID==null?null:newID, metaEntity);
+    }
+/*
+
+*/
+
+	/*
+		Base entities
+		-------------------
+	*/
+
+	entity Base {
+		@Type = {TypeName= Base;} 
+		@Cardinality = {Min = 0; Max = -1;}
+		slot Fields;
+
+		@Type = {TypeName = OperationDefinition;}
+		@Cardinality = {Min = 0; Max = -1;}
+		slot Operations;
+
+		operation void Validate(Object subject, Base? context=null) {
+			/*
+				Subject - the entity to be validated
+				MetaEntity - the direct meta of subject
+				This - The entity on the meta-chain of subject, which defined the validation rule
+			*/
+			
+			if (!(subject is Base))
+				return;
+			
+			//It is enough to run this validation logic on Base
+			if (this != Base)
+				return;
+
+			Base? metaEntity=GetMeta(subject);
+			if (metaEntity == subject)
+                throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = metaEntity;
+                    Instances = new Base[subject];
+                    Category = "BS/Base";
+                    ErrorCode = "BS_Base_0";
+                    Message = "No entity is a valid instance of itself";
+            	};	
+            
+			//Collection of the meta-attributes
+			Base[] metaAttribList = new Base[];
+			foreach (Base attrib in GetAttributes(subject)) 
+			{
+				Base metaAttrib=GetMeta(attrib)!!;
+			
+				//Attrib is a valid instance of its meta
+				String? errorMsg=ValidateGlobal(metaAttrib, attrib, subject);
+				if (errorMsg!=null) {
+				    throw new ValidationException {
+        	            ValidationSource = this;
+            	        Meta = metaAttrib;
+                	    Instances = new Base[attrib];
+                    	Category = "BS/Base";
+	                    ErrorCode = "BS_Base_1";
+    	                Message = "The attrib ${GetID(attrib)} is not a valid instance of its meta ${GetID(metaAttrib)}";
+						InnerException = errorMsg!!;
+        		    };
+				}
+
+				//Annotations can be added "anytime"
+				if (metaAttrib != Slot&&!(metaAttrib is Annotation)&&!Contains(metaAttribList, metaAttrib))
+					metaAttribList.Add(metaAttrib);			
+            }	
+
+			Base? metaIterator = subject;			
+			while (metaIterator != null) {
+				foreach (Base attrib in GetAttributes(metaIterator!!)) {	
+			
+					//Attrib is on the meta-chain
+					Remove(metaAttribList, attrib);
+			
+					//Check all annotations (along the meta-chain)
+					if (attrib is Annotation)
+					{
+						if (!(attrib.Check(metaIterator!!, subject, context))) {
+							throw new ValidationException {
+								ValidationSource = this;
+								Meta = metaEntity;
+								Instances =  new Base[attrib];
+								Category = "BS/Base";
+								ErrorCode = "BS_Base_2";
+								Message = "The annotation ${GetID(attrib)} failed on ${GetID(subject)}";
+							};
+                		}
+					}
+				}
+			
+			    metaIterator = GetMeta(metaIterator!!);
+			}
+
+			if (Count(metaAttribList)>0)
+				throw new ValidationException {
+                	ValidationSource = this;
+                	Meta = new Base[];
+                	Instances =  new Base[];
+                	Category = "BS/Base";
+                	ErrorCode = "BS_Base_3";
+                	Message = "Meta attribute ${GetID(metaAttribList[0])} not found on the chain of ${GetID(subject)}";
+            	};
+		}
+
+	operation void ValidateGamma(){
+		return;
+	}
+		
+	operation Bool isTransitiveInstance(Base meta, Bool includeSelf=false) {
+            if (includeSelf&&meta==this) return true;
+
+			Base? currentMeta = GetMeta(this);
+            while (currentMeta != null) {
+                if (currentMeta!! == meta)
+                    return true;
+				currentMeta = GetMeta(currentMeta!!);
+            }
+
+            return false;
+    }
+
+	operation Base? FindMeta(Base metaMetaEntity)
+	{
+		Base currentMeta = this;
+		while(currentMeta != metaMetaEntity) {
+			Base nextMeta = GetMeta(currentMeta)!!;
+			if (nextMeta == metaMetaEntity) return currentMeta;
+			currentMeta = nextMeta;
+		}
+		return null;
+	}
+
+	//TODO: We cannot turn off the feature "search by contract slot" currently
+	operation Base? GetAttributeByType(Base typeToFind, Bool transitiveAnnotations = true, Bool searchForContractSlot=false) {
+		if (!searchForContractSlot) {
+			foreach (Base typeAttribute in GetAttributes(typeToFind)) {
+				if (typeAttribute is ContractSlot)
+					return GetAttributeByType(typeToFind, transitiveAnnotations, true);
+			}
+		}
+
+        Base? currentEntity = this;			
+		while (currentEntity != null) {
+			foreach (Base attribute in GetAttributes(currentEntity!!))
+				if (attribute == typeToFind)
+				{
+					return null; 
+				} 
+				else
+					if (searchForContractSlot) {
+						if (GetLocalID(attribute)==GetLocalID(typeToFind))
+							return attribute;
+					}
+					else {
+						if (attribute.isTransitiveInstance(typeToFind)) 
+								return attribute;
+					}
+
+				if (transitiveAnnotations)
+				currentEntity = GetMeta(currentEntity!!);
+			else
+				break;
+		}
+
+        return null;
+    }
+
+		operation Slot[] GetAllSlots(Bool onMetaChain=true) {
+			Slot[] result=new Slot[];
+			Slot[] omittedSlots=new Slot[];
+
+			//TODO: Handle omit
+            Base? currentEntity = this;
+            while (currentEntity != null) {
+                foreach (Base attribute in GetAttributes(currentEntity!!))
+				{
+					//TODO: distinguish operation slots
+                    if (attribute is Slot && !Contains(omittedSlots, attribute) && 
+						!StrEndsWith(GetLocalID(attribute)!!,"OperationContainerSlot"))
+						{
+					 		Add(result, attribute);
+						}
+
+					if (attribute is Annotation_Omit)
+					{						
+						foreach(Base entityToOmit in GetValues(attribute.EntityToOmit))
+						{
+							Add(omittedSlots, entityToOmit);
+						}
+					}
+				}
+
+                if (!onMetaChain) break;
+				else
+					currentEntity = GetMeta(currentEntity!!);
+            }
+			
+			return result;
+		}
+
+		operation Base[] GetAllAttributesByType(Base typeToFind) {
+            Base? currentEntity = this;
+			Base[] result=new Base[];
+            while (currentEntity != null) {
+                foreach (Base attribute in GetAttributes(currentEntity!!))
+				{
+                    if (attribute == typeToFind)
+					{
+						return result; 
+					} 
+					else if (attribute.isTransitiveInstance(typeToFind)) {
+					    	Add(result, attribute);
+
+                    }
+				}
+                currentEntity = GetMeta(currentEntity!!);
+            }
+
+            return result;
+        }
+
+		operation Base getOrCreateInstanceSlot(Slot? metaSlot, String? newSlotName=null, Bool omitMetaSlot=true){
+			Slot? instanceSlot=null;
+			foreach(Base attrib in GetAttributes(this))
+			{
+				if (attrib is Slot && attrib.isTransitiveInstance(metaSlot, true) 
+					&&(newSlotName==null||GetLocalID(attrib)==newSlotName))
+				{					
+					instanceSlot = attrib;
+					break;
+				}
+			}
+
+			//Instantiate the slot if required
+			if (instanceSlot == null){
+
+				instanceSlot = Create(metaSlot!!, GetID(this)+"."+(newSlotName==null?GetLocalID(metaSlot!!):newSlotName));
+				AddAttribute(this, instanceSlot!!);
+				if (omitMetaSlot&&!(instanceSlot is Annotation_Omit)) {
+					//TODO: Add as value, not as a new omit annotation
+					//TODO: Handle ID convention error issue
+					Annotation_Omit omitAttrib=Create(Annotation_Omit,  GetID(this)+"_"+GetLocalID(metaSlot!!)+"_Omit");
+					Base EtO= Create((Annotation_Omit.EntityToOmit)!!,  GetID(omitAttrib)+".EntityToOmit" );
+					SetValue(EtO, metaSlot!!);
+					AddAttribute(omitAttrib, EtO);
+					AddAttribute(this, omitAttrib);
+				}
+			}
+			
+			return instanceSlot!!;
+		}
+
+		operation Base Set(Slot? metaSlot, Object newValue) {
+			if (metaSlot!=null)
+				SetValue(getOrCreateInstanceSlot(metaSlot, null, true), newValue);
+
+			return this;
+		}
+
+		operation Base Divide(Slot? metaSlot, Object newValue, String newSlotName) {
+			if (metaSlot!=null)
+				SetValue(getOrCreateInstanceSlot(metaSlot, newSlotName, false), newValue);
+
+			return this;
+		}
+
+		operation Object? Get(Slot? metaSlot){
+			if (metaSlot==null) return null;
+			Base? attrib = GetAttributeByType(metaSlot!!);
+			return attrib==null?null:GetValue(attrib!!);
+		}
+
+		operation Object[] GetAll(Slot? metaSlot) {
+			Object[] result = new Object[];
+			if (metaSlot==null) return result;
+            Base[] attribs = GetAllAttributesByType(metaSlot!!);
+            foreach(Base b in attribs)
+			{
+				foreach(Object attribValue in GetValues(b))
+					result.Add(attribValue);
+			}
+			return result;
+		}
+
+		operation Base AddValue(Slot? metaSlot, Object newValue) {
+			if (metaSlot!=null)
+			{
+				Slot instanceSlot = this.getOrCreateInstanceSlot(metaSlot, null, true);
+				if (GetValues(instanceSlot)==null)
+				{
+					Object[] values= new Object[newValue];
+					SetValues(instanceSlot, values);
+				}
+				else
+				{
+					Object[] values= GetValues(instanceSlot)!!;
+					Add(values, newValue);
+		        }
+			}
+
+			return this;
+		}
+
+		operation Base RemoveValue(Slot? metaSlot, Object valueToRemove) {
+			if (metaSlot!=null)
+			{
+				Slot instanceSlot = this.getOrCreateInstanceSlot(metaSlot, null);
+
+				if (GetValues(instanceSlot)!=null)
+				{
+					Object[] values= GetValues(instanceSlot)!!;				
+					Remove(values, valueToRemove);
+				}
+			}
+
+			return this;
+		}
+
+		operation Base AddAnnotation(Slot annotation) {
+			AddAttribute(this, Create(annotation, null));
+			return this;
+		}
+
+		operation Bool HasAnnotation(Annotation annotationToFind, Bool transitiveAnnotations=true) {
+			return  this.GetAttributeByType(annotationToFind, transitiveAnnotations)!=null;
+		}
+	}
+				
+	entity Slot: Base {
+		override operation void Validate(Object subject, Base? context=null) {
+			if (!(subject is Base.Fields)&&!(subject is Base.Operations))
+				throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = GetMeta(subject);
+                    Instances =  new Base[subject];
+                    Category = "BS/Slot";
+                    ErrorCode = "BS_Slot_1";
+                    Message = "Invalid slot ${GetID(subject)}, cannot instantiate Slot directly (use Base.Fields instead)";
+                };
+		}
+	}
+
+	// Primitive types
+	// ---------------
+	entity Basic_Type : Base {}
+	entity Bool: Basic_Type { 
+		override operation void Validate(Object subject, Base? context=null) {
+            if (!(subject is Bool))
+                throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = null;
+                    Instances =  new Base[];
+                    Category = "BS/PrimitiveType";
+                    ErrorCode = "BS_PT_0";
+                    Message = "Instance '${subject}' is not a Bool.";
+                };
+        }	}
+
+	entity String: Basic_Type {
+		 override operation void Validate(Object subject, Base? context=null) {
+            if (!(subject is String))
+                throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = this;
+                    Instances =  new Base[];
+                    Category = "BS/PrimitiveType";
+                    ErrorCode = "BS_PT_2";
+                    Message = "Instance '${subject}' is not a String.";
+                };
+        }	}
+	entity Number: Basic_Type {
+		 override operation void Validate(Object subject, Base? context=null) {
+            if (!(subject is Number))
+                throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = null;
+                    Instances =  new Base[];
+                    Category = "BS/PrimitiveType";
+                    ErrorCode = "BS_PT_1";
+                    Message = "Instance is not a Number.";
+                };
+        }	}
+	entity ObjectType: Basic_Type {}
+	entity Null: Basic_Type {}
+
+	entity Classifier : Base {
+	}
+
+	entity Exception : Classifier {
+        
+		@Type = {TypeName=String;}
+		@Cardinality = {Min = 1; Max = 1;}
+        new slot Message : Base.Fields;
+    }
+	entity ValidationException : Exception {
+        @Type= {TypeName=Base;}
+		@Cardinality = {Min = 1; Max = 1;}
+        new slot ValidationSource : Base.Fields;
+
+        @Type=  {TypeName=Base;}
+		@Cardinality = {Min = 1; Max = 1;}
+        new slot Meta : Base.Fields;
+
+        new slot Instances : Base.Fields;
+        new slot Attributes : Base.Fields;
+
+        @Type=  {TypeName=String;}
+        @Cardinality = {Min = 0; Max = 1;}
+        new slot Category : Base.Fields;
+
+        @Type=  {TypeName=String;}
+        @Cardinality = {Min = 1; Max = 1;}
+        new slot ErrorCode : Base.Fields;
+
+        @Type=  {TypeName=String;}
+        @Cardinality = {Min = 1; Max = 1;}
+        new slot Message : Base.Fields;
+
+		@Type=  {TypeName=String;}
+        @Cardinality = {Min = 0; Max = 1;}
+        new slot InnerException : Base.Fields;
+    }
+
+	entity VariableDeclarationStatement : Base {
+		slot Name;
+		slot Type;
+		slot DefaultValue;
+	}
+
+	entity OperationDefinition : Base {
+		slot ReturnType;
+		slot Parameters;
+	}
+
+	entity Annotation: Base {
+
+		//E.g. Type constraint - slot to apply the constraint on - entity containing the slot
+		operation Bool Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{			
+			if (containerContext==null) return true;
+			return true;
+		}
+	}
+	entity Annotation_Omit : Annotation {
+		slot EntityToOmit;
+
+		override operation Bool Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{
+			if (this->EntityToOmit==null) return true;
+			foreach(Base entityToOmit in GetValues(this.EntityToOmit))
+			{
+				Base? failedAttrib=null;			
+				foreach(Base attrib in GetAttributes(appliesOn))
+				{
+						//If the omit is applied in this entity, we can skip it
+						if (attrib == this) return true;
+
+						//We cannot throw new exception yet, since it is possible that the annotation is also in 'appliesOn'
+						//Cannot use the omitted attribute as meta
+						if (GetMeta(attrib)==entityToOmit)
+						{
+							failedAttrib=attrib;
+						}
+				}
+				
+				if (failedAttrib != null)
+						{
+							throw new ValidationException {
+								ValidationSource = this;
+								Meta = this;
+								Instances =  new Base[failedAttrib!!];
+								Category = "BS/Annotation";
+								ErrorCode = "BS_Ann_0";
+								Message = "Omitted attribute ${GetID(entityToOmit)} cannot be instantiated as ${GetID(failedAttrib!!)}";
+							};      		
+						}
+			}
+
+			return true;
+		}
+	}
+
+	entity Type: Annotation {
+		slot TypeName;
+		
+		operation Base GetType(){
+			return GetValue(this.GetAttributeByType(Type.TypeName))!!;
+		}
+
+ 		override operation void Validate(Object subject, Base? context=null) {
+			
+			if (this->TypeName==null) return;
+			if (!subject.GetType().isTransitiveInstance(this.GetType(), true))
+			   throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = GetMeta(this);
+                    Instances =  new Base[subject];
+                    Category = "BS/Type";
+                    ErrorCode = "BS_T_3";
+                    Message = "Type parameter set by the instance is not a valid instance of meta's type parameter (${GetID(this.GetType())} vs ${GetID(subject.GetType())})";
+                };
+		}
+        		
+
+		//E.g. Type constraint - slot to apply the constraint on - entity containing the slot
+		override operation Bool Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{			
+			 if (!(appliesOn is Slot)|| GetValue(appliesOn) != null) {				
+                
+				//If the value is the type specified, the constraint is satisfied
+                if (this->TypeName == GetValue(appliesOn))
+                    return true;
+
+				if (this->TypeName is OperationDefinition) return true;
+
+				//For primitive types
+				if (!(GetValue(appliesOn) is Entity)) 
+					return ValidateGlobal((this->TypeName)!!, GetValue(appliesOn)!!, null)==null;
+
+				if (!(GetValue(appliesOn).isTransitiveInstance(this->TypeName, true)))
+					throw new ValidationException {
+						ValidationSource = this;
+						Meta = null;
+						Instances =  new Base[];
+						Category = "BS/Type";
+						ErrorCode = "BS_Type_0";
+						Message = "Type does not conform with type constraint (${GetID((this->TypeName)!!)} vs ${GetValue(appliesOn)}";
+					};
+            }
+
+			return true;
+		}
+
+	}
+
+	entity Cardinality: Annotation {
+		slot Min;
+		slot Max;
+
+		operation Number GetMin(){
+			//Base? minValue=this.GetAttributeByType(Cardinality.Min);
+			Number? minV=this.Get(Cardinality.Min);
+			return minV==null?0:minV!!;
+		}
+
+		operation Number GetMax()
+		{
+			//TODO: Max may be defined not here, but on the metachain
+			Number? maxV=this.Get(Cardinality.Max);
+			return maxV==null||maxV!!<0?Number_MAX():maxV!!;
+		}
+
+		override operation void Validate(Object subject, Base? context=null) {
+			Number? minInst = subject.Get(Cardinality.Min);
+			if (minInst!=null&& minInst!!<GetMin())
+				   throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = this;
+                    Instances =  new Base[];
+                    Category = "BS/Cardinality";
+                    ErrorCode = "BS_Card_4";
+                    Message = "Cannot decrease minimum cardinality! (${GetMin()} -> ${minInst!!})";
+                }; 
+
+			Number? maxInst = subject.Get(Cardinality.Max);
+			if (maxInst!=null&& maxInst!!>GetMax())
+				   throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = this;
+                    Instances =  new Base[];
+                    Category = "BS/Cardinality";
+                    ErrorCode = "BS_Card_5";
+                    Message = "Cannot increase maximum cardinality! (${GetMax()} -> ${maxInst!!})";
+                }; 
+
+		}
+		  
+		override operation Bool Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{		
+			//Cardinality cannot be checked without a context
+			if (containerContext==null) return true;
+
+			if (!(appliesOn is Base)) 
+			    throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = null;
+                    Instances =  new Base[];
+                    Category = "BS/Cardinality";
+                    ErrorCode = "BS_Card_0";
+                    Message = "Cannot apply Cardinality constraint on a primitive value.";
+                };        			
+
+			Number minCount=0;
+			Number maxCount=0;
+
+			//Get attributes of context 'compatible' with subject until the annotation's source is found
+			//1. Find the subjectRoot that is the host of the current annotation
+			//2. Collect attributes, which are instances of the subjectRoot
+			//3. Count
+
+
+			//TODO
+			Base? subjectRoot = appliesOn;
+			while(subjectRoot != null) {
+				if (Contains(GetAttributes(subjectRoot!!), this)) break;
+				subjectRoot= GetMeta(subjectRoot!!);
+			}
+
+			if (subjectRoot==null)
+			{
+			    throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = null;
+                    Instances =  new Base[];
+                    Category = "BS/Cardinality";
+                    ErrorCode = "BS_Card_1";
+                    Message = "Annotation is not on the meta-chain.";
+                };        
+			}
+
+			Base[] attribList=new Base[];
+			Base[] omittedAttribList=new Base[];
+			Base? metaContext= containerContext;
+			Bool contextFound=false;
+			Base metaSubject = GetMeta(appliesOn)!!;
+			while(metaContext != null) {
+				foreach(Base attrib in GetAttributes(metaContext!!))
+				{				
+					if (!(Contains(omittedAttribList, attrib)))
+					{
+						//If the meta of the appliesOn is not yet omitted, than the card. is valid, since the meta has been validated allready
+						//and appliesOn can not make it invalid (?)
+						if (attrib == metaSubject) return true;
+						
+						if (attrib.isTransitiveInstance(subjectRoot!!, true))
+						 attribList.Add(attrib);
+					}
+					if (attrib==subjectRoot!!)
+					{
+						 contextFound=true;
+						 break;
+					}
+					if (attrib is Annotation_Omit)
+					{
+ 						omittedAttribList.Add(attrib->EntityToOmit);
+						attribList.Remove(attrib->EntityToOmit);
+					}
+				}
+
+				if (contextFound) break;
+				metaContext= GetMeta(metaContext!!);
+			}
+
+				foreach(Base attrib in attribList)
+				{
+					Base? card=attrib.GetAttributeByType(Cardinality);
+					minCount+=card!!.GetMin();
+					maxCount+=card!!.GetMax();
+				}
+
+			if (this.GetMin() > minCount) {
+				 throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = this;
+                    Instances =  new Base[];//TODO 0615 - should be instances
+                    Category = "BS/CardCheck";
+                    ErrorCode = "BS_CC_2";
+                    Message = "Cardinality minimum (${this.GetMin()}) is violated (${minCount}) ";
+                };
+			}
+
+			if (this.GetMax() < maxCount && maxCount<Number_MAX()) {
+				 throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = this;
+                    Instances =  new Base[];//TODO 0615 - should be instances
+                    Category = "BS/CardCheck";
+                    ErrorCode = "BS_CC_3";
+                    Message = "Cardinality maximum (${this.GetMax()}) is violated (${maxCount}) ";
+                };
+			}
+
+			return true;
+		}
+	}
+
+	entity Array : Classifier {
+        @Type= {TypeName = Base;}
+        @Cardinality= {Min=1; Max=1;}
+        new slot BaseType : Base.Fields;
+	}
+
+	entity Contract: Annotation {
+
+        override operation Bool Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{
+			Slot[] subjectSlotList = appliesOn.GetAllSlots();
+            String[] missingSlots = new String[];
+            foreach(Slot contractSlot in this.GetAllSlots())
+            {
+                if (GetLocalID(contractSlot)!="Fields"&&GetLocalID(contractSlot)!="Operations") {
+                String contractSlotError = "";
+				Bool slotFound=false;
+                
+                //Searching for the slot in subject's slots
+                foreach(Slot subjectSlot in subjectSlotList) {
+                    if (GetLocalID(subjectSlot) == GetLocalID(contractSlot)) {
+
+						slotFound = true;
+                        foreach(Base contractAnnotation in contractSlot.GetAllAttributesByType(Annotation))
+                        {
+                            String contractAnnotationError = "";
+                            Base? slotAnnotation = subjectSlot.GetAttributeByType(GetMeta(contractAnnotation));
+                            if (slotAnnotation!=null) {
+                                try {
+                                    contractAnnotation.Validate(slotAnnotation!!, subjectSlot);
+                                }
+                                catch (ValidationException ex) {                                    
+									contractAnnotationError = "The annotation ${GetLocalID(contractAnnotation)} failed ('${ex->Message}')";
+                                }
+                            }
+							else
+								contractAnnotationError = "The annotation ${GetLocalID(contractAnnotation)} is missing.";
+                            
+							if (contractAnnotationError!="") {
+								contractSlotError = contractAnnotationError;
+								break;
+							}
+                        }
+
+                        break;
+                    }                    
+                }                
+
+				if (!slotFound) 
+				 	Add(missingSlots, "slot ${GetLocalID(contractSlot)} (not found)");
+				else 
+					if (contractSlotError!="") Add(missingSlots, "slot ${GetLocalID(contractSlot)}: ${contractSlotError}");
+                }
+            }
+
+            if (Count(missingSlots)==0) return true;
+
+            String missingSlotResult="";
+            foreach(String ms in missingSlots){
+                 missingSlotResult+="- ${ms}\n";}
+
+             throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = this;
+                    Instances =  new Base[];//TODO 0615 - should be instances
+                    Category = "BS/Contract";
+                    ErrorCode = "BS_Contract_1";
+                    Message = "Missing contract slots found:\n${missingSlotResult}";
+                };
+
+            return false;
+        }
+    }
+
+	entity ContractSlot: Annotation {}
+
+	entity FinalInstance: Annotation{
+		override operation Bool Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{
+			return true;
+			Bool hasError = false;
+			if (appliesOn!=definedFor)
+			{
+				throw new ValidationException {
+                    ValidationSource = this;
+                    Meta = this;
+                    Instances =  new Base[];//TODO 0615 - should be instances
+                    Category = "BS/FinalInstance";
+                    ErrorCode = "BS_FinalInstance_0";
+                    Message = "Entity ${GetID(appliesOn)} is marked as final, thus it cannot be refined.";
+                };				
+				return false;
+			}
+
+			return IsFinal(appliesOn);
+		}		
+
+		operation Bool CheckSlotValue(Slot s){
+			//If the slot is optional and does not have a value -> valid
+				if (GetValue(s)==null) {
+					Cardinality card = s.GetAttributeByType(Cardinality);
+					if (card.GetMin()>0) {
+						throw new ValidationException {
+							ValidationSource = this;
+							Meta = this;
+							Instances =  new Base[];//TODO 0615 - should be instances
+							Category = "BS/FinalInstance";
+							ErrorCode = "BS_FinalInstance_1";
+							Message = "Slot ${GetID(s)} is not optional, but it does not have a value in final instance";
+						};
+						return false;
+					}
+				}
+				else
+				{
+					//If the slot has a value and it is primitive or consists of final slots only -> valid	
+					foreach(Object slotValue in GetValues(s))
+					{
+						if (!IsPrimitiveLiteral(slotValue) && (slotValue.GetAttributeByType(FinalInstance)==null))
+						{
+							if (!IsFinal(slotValue))
+							{
+								throw new ValidationException {
+									ValidationSource = this;
+									Meta = this;
+									Instances =  new Base[];//TODO 0615 - should be instances
+									Category = "BS/FinalInstance";
+									ErrorCode = "BS_FinalInstance_2";
+									Message = "Slot ${GetID(s)} is mandatory but it does not have an appropriate (final) value";
+								};
+				
+								return false;
+							}
+						}
+					}
+				}
+			
+			return true;
+		}
+
+		operation Bool IsFinal(Object appliesOn) {
+			if (!appliesOn is Base) return true;
+			
+			if (appliesOn is Slot) {
+				return CheckSlotValue(appliesOn);
+			}
+			else
+				foreach(Slot s in appliesOn.GetAllSlots())
+					if (!CheckSlotValue(s))
+						return false;
+
+			return true;
+		}
+	}
+
+
+}

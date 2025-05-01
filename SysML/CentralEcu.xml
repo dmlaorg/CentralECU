@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="windows-1252"?>
+<UMLProfile profiletype="uml2">
+	<Documentation id="7421CFEE-F" name="CentralEcu" version="1.0" notes="CentralEcu"/>
+	<Content>
+		<Stereotypes>
+			<Stereotype name="CentralEcuComposition" notes="" cx="170" cy="70" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="Automotive::AutomotiveElement" baseStereotypes="Automotive::AutomotiveElement">
+				<TaggedValues>
+					<Tag name="Channels" type="Classifier:Channels" description="" unit="Channel" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Channel" notes="" cx="132" cy="49" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="Automotive::AutomotiveElement" baseStereotypes="Automotive::AutomotiveElement">
+				<TaggedValues>
+					<Tag name="isPhysical" type="int" description="" unit="" values="" default="0"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="PowerModule" notes="" cx="100" cy="30" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="Automotive::AutomotiveElement" baseStereotypes="Automotive::AutomotiveElement"/>
+			<Stereotype name="CentralEcuType" notes="" cx="224" cy="90" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="CentralEcuComposition" baseStereotypes="CentralEcuComposition">
+				<TaggedValues>
+					<Tag name="PowerModules" type="Classifier:PowerModules" description="" unit="PowerModule" values="" default=""/>
+					<Tag name="SoCs" type="Classifier:SoCs" description="" unit="SoC" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="SoC" notes="" cx="201" cy="80" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="CentralEcuComposition" baseStereotypes="CentralEcuComposition">
+				<TaggedValues>
+					<Tag name="Cores" type="Classifier:Cores" description="" unit="Core" values="" default=""/>
+					<Tag name="eSoftwares" type="Classifier:eSoftwares" description="" unit="eSoftware" values="" default=""/>
+					<Tag name="Memory" type="Classifier:Memory" description="" unit="SysML1.4::block" values="" default=""/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="Core" notes="" cx="127" cy="62" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="Automotive::AutomotiveElement" baseStereotypes="Automotive::AutomotiveElement">
+				<TaggedValues>
+					<Tag name="Frequency" type="int" description="" unit="" values="" default=""/>
+					<Tag name="isLockstep" type="int" description="" unit="" values="" default="0"/>
+				</TaggedValues>
+			</Stereotype>
+			<Stereotype name="eSoftware" notes="" cx="100" cy="80" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="CentralEcuComposition" baseStereotypes="CentralEcuComposition"/>
+			<Stereotype name="Mcu" notes="" cx="170" cy="80" bgcolor="16251646" fontcolor="0" bordercolor="0" borderwidth="1" hideicon="0" generalizes="SoC" baseStereotypes="SoC" redefines="SoC">
+				<TaggedValues>
+					<Tag name="Cores" type="Classifier:Cores" description="" unit="Core" values="" default=""/>
+				</TaggedValues>
+				<RemovedProperties>
+					<RemovedProperty name="Channels" description=""/>
+				</RemovedProperties>
+			</Stereotype>
+		</Stereotypes>
+		<TaggedValueTypes>
+			<TaggedValueType property="Channels" description="&lt;ol&gt;&#xA;	&lt;li&gt;&lt;/li&gt;&#xA;&lt;/ol&gt;" notes="Type=RefGUIDList;Stereotypes=Channel;"/>
+			<TaggedValueType property="PowerModules" description="" notes="Type=RefGUIDList;Stereotypes=PowerModule;"/>
+			<TaggedValueType property="Cores" description="" notes="Type=RefGUIDList;Stereotypes=Core;"/>
+			<TaggedValueType property="eSoftwares" description="" notes="Type=RefGUIDList;Stereotypes=eSoftware;"/>
+		</TaggedValueTypes>
+		<ViewDefinitions/>
+		<Metamodel/>
+	</Content>
+</UMLProfile>
