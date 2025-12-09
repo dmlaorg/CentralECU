@@ -141,7 +141,7 @@ package CentralEcu {
      */
 
     operation Bool Test_ASIL_typeValidation() {
-        Interface RTE_A = Create(Interface).Set(AutomotiveElement.SafetyLevel, "ASIL_A");
+        Interface RTE_A = Create(Interface).Set(CentralEcuElement.SafetyLevel, "ASIL_A");
         try {
             ASIL.Validate(RTE_A->SafetyLevel);
         }
@@ -153,7 +153,7 @@ package CentralEcu {
     operation Bool Test_ASIL_valueValidation() {
         ASIL_A lvl = Create(ASIL_A).Set(ASIL.Value,-1);
         //PrintEntity(lvl,true);
-        Interface RTE_A = Create(Interface).Set(AutomotiveElement.SafetyLevel, lvl);
+        Interface RTE_A = Create(Interface).Set(CentralEcuElement.SafetyLevel, lvl);
         //PrintEntity(RTE_A,true);
         try {
             ASIL.Validate(RTE_A->SafetyLevel);
@@ -164,8 +164,8 @@ package CentralEcu {
         return false;
     }
     operation Bool Test_AutomotiveElement_decompositionCheck() {
-        SoC Core_B = Create(Core).Set(AutomotiveElement.SafetyLevel, ASIL_B);
-        SoC SoC_D = Create(SoC).Set(AutomotiveElement.SafetyLevel, ASIL_D).Set(SoC.Cores,Core_B);
+        SoC Core_B = Create(Core).Set(CentralEcuElement.SafetyLevel, ASIL_B);
+        SoC SoC_D = Create(SoC).Set(CentralEcuElement.SafetyLevel, ASIL_D).Set(SoC.Cores,Core_B);
         try {
             Base.Validate(SoC_D);
         }
@@ -187,7 +187,10 @@ package CentralEcu {
         Port? CoreFromOutput = GetValue(CoreFrom.Ports);
         PrintLn("${GetValue(CoreFrom.Ports)}");
         PrintLn("${GetValue(CoreFromOutput.Interface)}");
-        if (GetValue(CoreFromOutput.Interface) != MFIS) {PrintError("CoreFrom port interface was not set correctly!"); return false;}
+        if (GetValue(CoreFromOutput.Interface) != MFIS) {
+            PrintError("CoreFrom port interface was not set correctly!");
+            return false;
+        }
         return connected;
     }
 
