@@ -22,8 +22,7 @@ package Automotive {
             if (safetyLevelValue != null) {
                 Bool isASILvalue = false;
                 foreach (ASIL lvl in GetInstances(ASIL, false)) { // collect valid ASIL definitions
-                    Base? meta = GetMeta(subject);
-                    if (meta != null && lvl == meta && lvl->Value == safetyLevelValue!!) { // and search for valid value
+                    if (lvl->Value == safetyLevelValue!!) { // and search for valid value
                         isASILvalue = true;
                         continue;
                     }
@@ -41,11 +40,12 @@ package Automotive {
         }
     }
 
-    entity QM : ASIL {slot Value = 0;}
-    entity ASIL_A : ASIL {slot Value = 1;}
-    entity ASIL_B : ASIL {slot Value = 2;}
-    entity ASIL_C : ASIL {slot Value = 3;}
-    entity ASIL_D : ASIL {slot Value = 4;}
+// Create generic constant / "set once" annotation for ASIL levels instead of a custom Validate()
+    entity QM : ASIL {slot Value = 0.0;}
+    entity ASIL_A : ASIL {slot Value = 1.0;}
+    entity ASIL_B : ASIL {slot Value = 2.0;}
+    entity ASIL_C : ASIL {slot Value = 3.0;}
+    entity ASIL_D : ASIL {slot Value = 4.0;}
 
     // Automotive concepts enforced as contracts
     entity AutomotiveElement : Contract {
@@ -65,13 +65,13 @@ package Automotive {
             //PrintEntity(definedFor!!);
             ASIL? safetyLevelComposition = appliesOn.GetAttributeByType(ASIL,true,true);
             if (safetyLevelComposition == null) return true; //nothing to check then!
-            //PrintLn("${safetyLevelComposition.Value}");
+            PrintLn("${safetyLevelComposition.Value}");
             foreach (Base attrib in GetAttributes(appliesOn!!)) {
                 if (!(attrib is Entity)) continue; //nothing to check then!
                 Base? metaAttrib = GetMeta(attrib);
                 Number? safetyLevelValuePart = attrib.GetAttributeByType(ASIL.Value);
                 if (safetyLevelValuePart == null) continue; //nothing to check then!
-                //PrintLn("${safetyLevelValuePart!!}");
+                PrintLn("${safetyLevelValuePart!!}");
                 if (safetyLevelComposition.Value > safetyLevelValuePart + 1) {
                     throw new ValidationException {
                         ValidationSource = this;
