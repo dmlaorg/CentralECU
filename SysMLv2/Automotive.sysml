@@ -62,7 +62,8 @@ package Automotive {
              */
         attribute id : String;
         attribute text : String;
-        subject : AutomotiveElement;
+        attribute safetyLevel : ASIL;
+        attribute supplier : Supplier;
     }
 
 }

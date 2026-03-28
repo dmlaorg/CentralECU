@@ -1,101 +1,141 @@
 package Automotive {
-    import Bootstrap
+    /*
+     *
+     * 											Automotive types and concepts
+     * 										------------------------------------
+     */
 
+    entity AutomotiveType : Base {}
     // ASIL as enum 
-    entity ASIL : Classifier {
+    entity ASIL : AutomotiveType {
         @Cardinality = {Min = 1; Max = 1;}
-        @Type = {TypeName = Number;}//1...5 QM, A..., D
-        new slot Value : Base.Fields;
+        @Type = {TypeRef = Int;}
+        new slot value : Base.Fields;
+        //1...5 QM, A..., D
 
-		override operation void Validate(Object subject, Base? context=null) {
+		override operation ValidationError[] Validate(Object subject, Base? context=null) {
+			ValidationError[] result = [];
             if (!(subject is ASIL))
-                throw new ValidationException {
-                    ValidationSource = this;
-                    Meta = null;
-                    Instances =  new Base[];
-                    Category = "Automotive/ASIL";
-                    ErrorCode = "ASIL_1";
-                    Message = "Instance is not an ASIL.";
-                };
+            {
+                add(result, Create(ValidationError, true)
+                        .Set(ValidationError.ValidationSource, this)
+                        .Set(ValidationError.Meta, GetMeta(this))
+                        .Set(ValidationError.Instances, Base[subject])
+                        .Set(ValidationError.Category, "Automotive/ASIL")
+                        .Set(ValidationError.ErrorCode, "ASIL_1")
+                        .Set(ValidationError.Message, "Instance is not an ASIL.")
+                );
+            }
     
-            Number? safetyLevelValue = subject.Get(ASIL.Value);
+            Int? safetyLevelValue = getSlotValue(subject.value) as Int;
             if (safetyLevelValue != null) {
                 Bool isASILvalue = false;
-                foreach (ASIL lvl in GetInstances(ASIL, false)) { // collect valid ASIL definitions
-                    if (lvl->Value == safetyLevelValue!!) { // and search for valid value
+                foreach (ASIL lvl in getInstances(ASIL, false)) { 
+                    // collect valid ASIL definitions
+                    if ((getSlotValue(lvl.value) as Int) == safetyLevelValue!!) { 
+                        // and search for valid value
                         isASILvalue = true;
-                        continue;
+                        break;
                     }
                 }
                 if (!isASILvalue)
-                    throw new ValidationException {
-                        ValidationSource = this;
-                        Meta = GetMeta(this);
-                        Instances = new Base[subject];
-                        Category = "Automotive/ASIL";
-                        ErrorCode = "ASIL_2";
-                        Message = "An ASIL value shall be an integer between 0 and 4 (0: QM, ... 4: ASIL D) - Violated ( Safety level ${safetyLevelValue!!} )";
-                    };
+                {
+                    add(result, Create(ValidationError, true)
+                            .Set(ValidationError.ValidationSource, this)
+                            .Set(ValidationError.Meta, GetMeta(this))
+                            .Set(ValidationError.Instances, Base[subject])
+                            .Set(ValidationError.Category, "Automotive/ASIL")
+                            .Set(ValidationError.ErrorCode, "ASIL_2")
+                            .Set(ValidationError.Message, "An ASIL value shall be an integer between 0 and 4 (0: QM, ... 4: ASIL D) - Violated ( Safety level ${safetyLevelValue!!} )")
+                    );
+                }
             }
+            return result;
         }
     }
 
-// Create generic constant / "set once" annotation for ASIL levels instead of a custom Validate()
-    entity QM : ASIL {slot Value = 0.0;}
-    entity ASIL_A : ASIL {slot Value = 1.0;}
-    entity ASIL_B : ASIL {slot Value = 2.0;}
-    entity ASIL_C : ASIL {slot Value = 3.0;}
-    entity ASIL_D : ASIL {slot Value = 4.0;}
+    entity ConstantValue : Constraint {
+        override operation ValidationError[] Check(Base definedFor, Object appliesOn, Base? containerContext)
+        {
+			ValidationError[] result = [];
+            
+			if (getSlotValue(appliesOn) != getSlotValue(definedFor)) 
+            {
+			    add(result, Create(ValidationError, true)
+								.Set(ValidationError.ValidationSource, this)
+								.Set(ValidationError.Meta, GetMeta(this))
+								.Set(ValidationError.Instances, Base[appliesOn])
+								.Set(ValidationError.Category, "Automotive/Constant")
+								.Set(ValidationError.ErrorCode, "Constant_1")
+								.Set(ValidationError.Message, "Constant value cannot be overriden!")
+							);
+            }
+            return result;
+        }
+    }
+
+    entity QM       : ASIL { @ConstantValue slot value = 0; }
+    entity ASIL_A   : ASIL { @ConstantValue slot value = 1; }
+    entity ASIL_B   : ASIL { @ConstantValue slot value = 2; }
+    entity ASIL_C   : ASIL { @ConstantValue slot value = 3; }
+    entity ASIL_D   : ASIL { @ConstantValue slot value = 4; }
+    
+    entity AutomotiveDomain : AutomotiveType {}
+    entity Power : AutomotiveDomain {}
+    entity Chassis : AutomotiveDomain {}
+    entity Body : AutomotiveDomain {}
+    entity Cockpit : AutomotiveDomain {}
+    entity Telematic : AutomotiveDomain {}
+    entity Trailer : AutomotiveDomain {}
+
+    entity Supplier : Classifier {
+        @Type= { TypeRef=Bool; }
+        @Cardinality= {Min= 1; Max=1; }
+        new slot isInternal;
+
+        @Type= { TypeRef=AutomotiveDomain; }
+        @Cardinality= {Min= 1; Max=-1; }
+        new slot domain;
+
+        @Type= { TypeRef=String; }
+        @Cardinality= {Min= 1; Max=1; }
+        new slot name;
+
+        @Type= { TypeRef=String; }
+        @Cardinality= {Min= 1; Max=1; }
+        new slot id;
+
+        @Type= { TypeRef=String; }
+        @Cardinality= {Min= 0; Max=-1; }
+        new slot contactInfo;
+
+        @Type= { TypeRef=Supplier; }
+        @Cardinality= {Min= 0; Max=-1; }
+        new slot alternatives;
+    }
 
     // Automotive concepts enforced as contracts
     entity AutomotiveElement : Contract {
+        
+        @Cardinality = {Max = 1;}
+        @Type = {TypeRef = ASIL;} 
+        @ContractSlot
+        new slot safetyLevel : Base.Fields;
 
         @Cardinality = {Max = 1;}
-        @Type = {TypeName = ASIL;} 
+        @Type = {TypeRef = Supplier;}
         @ContractSlot
-        new slot SafetyLevel : Base.Fields;
-
-        @Cardinality = {Max = 1;}
-        @Type = {TypeName = String;}
-        @ContractSlot
-        new slot Brand : Base.Fields;
-
-        override operation Bool Check(Base definedFor, Object appliesOn, Base? containerContext) {
-            //PrintEntity(appliesOn!!);
-            //PrintEntity(definedFor!!);
-            ASIL? safetyLevelComposition = appliesOn.GetAttributeByType(ASIL,true,true);
-            if (safetyLevelComposition == null) return true; //nothing to check then!
-            PrintLn("${safetyLevelComposition.Value}");
-            foreach (Base attrib in GetAttributes(appliesOn!!)) {
-                if (!(attrib is Entity)) continue; //nothing to check then!
-                Base? metaAttrib = GetMeta(attrib);
-                Number? safetyLevelValuePart = attrib.GetAttributeByType(ASIL.Value);
-                if (safetyLevelValuePart == null) continue; //nothing to check then!
-                PrintLn("${safetyLevelValuePart!!}");
-                if (safetyLevelComposition.Value > safetyLevelValuePart + 1) {
-                    throw new ValidationException {
-                        ValidationSource = this;
-                        Meta = GetMeta(this);
-                        Instances = new Base[appliesOn];
-                        Category = "Automotive/AutomotiveElement";
-                        ErrorCode = "AutomotiveElement_1";
-                        Message = "The ASIL value of a composition cannot be more that two levels higher than of it parts - Decomposition rules violated ( composition: ${safetyLevelComposition.Value} vs part: ${safetyLevelValuePart!!} )";
-                    };
-                    return false;
-                }
-            }
-            return true;
-        }
+        new slot supplier : Base.Fields;
     }
 
     entity AutomotiveRequirement : AutomotiveElement {
 
         @Cardinality = {Min = 1; Max = 1;}
-        @Type = {TypeName = String;}
-        new slot ID : Base.Fields;
+        @Type = {TypeRef = String;}
+        new slot id : Base.Fields;
 
         @Cardinality = {Max = 1;}
-        @Type = {TypeName = String;}
-        new slot Text : Base.Fields;
+        @Type = {TypeRef = String;}
+        new slot text : Base.Fields;
     }
 }

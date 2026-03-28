@@ -1,1 +1,7 @@
 DMLA/bootstrap.dmla
+DMLA/Tests.dmla
+DMLA/workspace.dmla
+
+output
+.vscode
+docs
