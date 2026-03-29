@@ -7,7 +7,7 @@
 | `SenderReceiverIF` | `port def` with `out item` + `safetyLevel : ASIL` | P-Port un-conjugated, R-Port conjugated (`~`) |
 | `ClientServerIF` | `port def` with `in item` request + `out item` response + `safetyLevel` | Server un-conjugated, Client conjugated |
 | `PeriodicTiming` / `EventTiming` | `attribute def` | Runnable activation triggers |
-| `Runnable` | `action def` | Smallest schedulable code unit |
+| `Runnable` | `action def` with `wcet : Integer` | Smallest schedulable code unit with worst-case execution time |
 | `OsTask` | `part def :> AutomotiveElement` | Periodic task with timing, priority, safetyLevel |
 | `SoftwareComponent` hierarchy | `abstract part def :> AutomotiveElement` | `AtomicSWC`, `CompositionSWC`, `ApplicationSWC`, `SensorActuatorSWC`, `ServiceSWC` |
 | `RTE` | `part def :> AutomotiveElement` | Runtime Environment mediator |
