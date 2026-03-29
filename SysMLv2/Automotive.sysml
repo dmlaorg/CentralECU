@@ -4,6 +4,10 @@ package Automotive {
     private import SysML::Systems::*;
     private import SysML::RequirementUsage::*;
     private import ScalarValues::*; 
+    private import SI::s;
+    private import MeasurementReferences::ConversionByPrefix; 
+    private import ISQBase::DurationUnit;
+    private import SIPrefixes::milli;
 
     comment about Automotive
     /*
@@ -66,4 +70,5 @@ package Automotive {
         attribute supplier : Supplier;
     }
 
+    attribute <ms> millisecond : DurationUnit { :>> unitConversion: ConversionByPrefix { :>> prefix = milli; :>> referenceUnit = s; } }
 }

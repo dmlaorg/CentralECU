@@ -58,7 +58,7 @@ package AUTOSAR {
 
     attribute def PeriodicTiming {
         doc /* Cyclic timing trigger for periodic runnable activation. */
-        attribute periodMs : Integer;
+        attribute period : Integer;
     }
 
     attribute def EventTiming {
@@ -72,6 +72,8 @@ package AUTOSAR {
         doc /* An AUTOSAR Runnable Entity — the smallest schedulable code unit.
              * Runnables reside in atomic SwCs and are activated by timing or event triggers.
              */
+
+        attribute wcet : Integer; // Worst-case execution time here, dimensionless
     }
 
     // ─── OS Task ─────────────────────────────────────────────────────

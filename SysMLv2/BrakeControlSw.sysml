@@ -4,6 +4,7 @@ package BrakeControlSw {
     private import Automotive::*;
     private import AUTOSAR::*;
     private import CentralEcu::*;
+    private import SI::*;
 
     comment about BrakeControlSw
     /*
@@ -60,6 +61,8 @@ package BrakeControlSw {
     action def ReadWheelSpeedRunnable :> Runnable {
         doc /* Reads raw wheel speed from sensor hardware. */
         out item reading : WheelSpeedData;
+
+        :>> wcet = 5 [ms];
     }
 
     action def BrakeControlRunnable :> Runnable {
@@ -111,7 +114,7 @@ package BrakeControlSw {
 
     part task10ms : OsTask {
         doc /* 10 ms high-priority task for safety-critical brake runnables. */
-        :>> timing { :>> periodMs = 10; }
+        :>> timing { :>> period = 10 [ms]; }
         :>> priority = 5;
         :>> safetyLevel = ASIL::ASIL_D;
         :>> supplier.name = "OsVendor";
@@ -127,7 +130,7 @@ package BrakeControlSw {
 
     part task100ms : OsTask {
         doc /* 100 ms lower-priority task for diagnostic runnables. */
-        :>> timing { :>> periodMs = 100; }
+        :>> timing { :>> period = 100 [ms]; }
         :>> priority = 3;
         :>> safetyLevel = ASIL::ASIL_B;
         :>> supplier.name = "OsVendor";
@@ -185,5 +188,4 @@ package BrakeControlSw {
         interface diagConnection connect
             controller.diagClient to diagComponent.diagServer;
     }
-
 }
