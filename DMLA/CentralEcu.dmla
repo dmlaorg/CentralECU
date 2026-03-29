@@ -7,13 +7,13 @@ package CentralEcu {
      * 										----------------------------
      */
 
-    entity SystemBlock : Classifier {
+    entity Part : Classifier {
         @Type = {TypeRef = Port;}
         new slot ports : Base.Fields;
     }
 
     @AutomotiveElement
-    entity CentralEcuElement : SystemBlock {
+    entity CentralEcuElement : Part {
         @Cardinality = {Max = 1;}
         @Type = {TypeRef = ASIL;} 
         @ContractSlot
@@ -36,7 +36,7 @@ package CentralEcu {
     entity Output : Port {}
 
     // Base elements for model connection
-    entity Interface : SystemBlock {}
+    entity Interface : Part {}
     /*
      *
      * 											CentralEcu components
@@ -136,33 +136,26 @@ package CentralEcu {
         new slot sizeKB : Base.Fields;
     }
 
-    operation Bool Connect(SystemBlock from, SystemBlock to, Interface interfaceInstance){
+    operation Bool Connect(Part from, Part to, Interface interfaceInstance){
         Bool fromConnected = false;
         Bool toConnected = false;
-        try {
-            foreach (Base attrib in from.GetAllSlots()) {
-                if ((attrib is Output) && getSlotValue(attrib.interface as Interface) == null) {
-                    attrib.Set(Output.interface,interfaceInstance);
-                    interfaceInstance.AddValue(Interface.ports,attrib);
-                    PrintLn("Connected ${GetID(from)} to ${GetID(interfaceInstance)}");
-                    fromConnected = true;
-                }
+        foreach (Base attrib in from.GetAllSlots()) {
+            if ((attrib is Output) && getSlotValue(attrib.interface as Interface) == null) {
+                attrib.Set(Output.interface,interfaceInstance);
+                interfaceInstance.AddValue(Interface.ports,attrib);
+                PrintLn("Connected ${GetID(from)} to ${GetID(interfaceInstance)}");
+                fromConnected = true;
             }
-            foreach (Base attrib in to.GetAllSlots()) {
-                if ((attrib is Input) && getSlotValue(attrib.interface as Interface) == null) {
-                    attrib.Set(Input.interface,interfaceInstance);
-                    interfaceInstance.AddValue(Interface.ports,attrib);
-                    PrintLn("Connected ${GetID(to)} to ${GetID(interfaceInstance)}");
-                    toConnected = true;
-                }
+        }
+        foreach (Base attrib in to.GetAllSlots()) {
+            if ((attrib is Input) && getSlotValue(attrib.interface as Interface) == null) {
+                attrib.Set(Input.interface,interfaceInstance);
+                interfaceInstance.AddValue(Interface.ports,attrib);
+                PrintLn("Connected ${GetID(to)} to ${GetID(interfaceInstance)}");
+                toConnected = true;
             }
-            return fromConnected && toConnected;
         }
-        catch (ValidationException exc){
-            PrintError((exc.Message)!! as String);
-            PrintError((exc.InnerException)!! as String);
-            return false;
-        }
+        return fromConnected && toConnected;
     }
 
     /*

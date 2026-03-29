@@ -4,7 +4,7 @@ package CentralECUDomain {
     private import Automotive::*;
     private import SequenceFunctions::size;
 
-    requirement <'PTCnumber123456789'> MinimumNumberOfMemoryBanks : AutomotiveRequirement {
+    requirement <'VCnumber123'> MinimumNumberOfMemoryBanks : AutomotiveRequirement {
         doc /* The system shall have at least two separate non-volatile memory banks. */
         :>> id = "OTA-1-1";
         :>> text = "The system shall have at least two separate non-volatile memory banks.";
