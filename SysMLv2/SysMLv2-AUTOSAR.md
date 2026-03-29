@@ -1,4 +1,4 @@
-# AUTOSAR Classic Concepts in SysML v2
+# AUTOSAR Classic Concepts in SysML v2 - a subset for SW architecture
 
 | Concept | SysML v2 Construct | Notes |
 |---|---|---|
