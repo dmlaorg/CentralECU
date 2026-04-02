@@ -1,4 +1,4 @@
-package CentralECUDomain {
+package CentralEcu {
 
     private import ScalarValues::*; 
     private import Automotive::*;
