@@ -2,6 +2,7 @@ package AUTOSAR {
 
     private import ScalarValues::*;
     private import Automotive::*;
+    private import Collections::*;
 
     comment about AUTOSAR
     /*
@@ -19,18 +20,19 @@ package AUTOSAR {
 
     // ─── Data types for inter-component communication ────────────────
 
-    item def DataElement {
+    attribute def DataElement {
         doc /* Base type for data elements exchanged via Sender/Receiver interfaces. */
     }
 
     item def ServiceRequest {
         doc /* Request payload for Client/Server communication. */
-        attribute operationId : String;
+        attribute operationId[0..1] : String;
+        attribute dataElement[0..*] : DataElement;
     }
 
     item def ServiceResponse {
         doc /* Response payload for Client/Server communication. */
-        attribute returnCode : Integer;
+        attribute returnCode[0..1] : Integer;
     }
 
     // ─── Communication Interfaces ────────────────────────────────────
@@ -40,8 +42,7 @@ package AUTOSAR {
              * Provider (P-Port) uses the un-conjugated form — data flows out.
              * Consumer (R-Port) uses the conjugated (~) form — data flows in.
              */
-        attribute safetyLevel : ASIL;
-        out item dataElement : DataElement;
+        out attribute dataElement[0..*] : DataElement;
     }
 
     port def ClientServerIF {
@@ -49,21 +50,15 @@ package AUTOSAR {
              * Server (P-Port) uses the un-conjugated form — receives requests, sends responses.
              * Client (R-Port) uses the conjugated (~) form — sends requests, receives responses.
              */
-        attribute safetyLevel : ASIL;
         in item request : ServiceRequest;
         out item response : ServiceResponse;
     }
 
     // ─── Timing and Scheduling ───────────────────────────────────────
 
-    attribute def PeriodicTiming {
-        doc /* Cyclic timing trigger for periodic runnable activation. */
-        attribute period : Integer;
-    }
-
-    attribute def EventTiming {
+    attribute def Event {
         doc /* Event-driven trigger for on-demand runnable activation. */
-        attribute eventName : String;
+        attribute eventID : Integer;
     }
 
     // ─── Runnable Entity ─────────────────────────────────────────────
@@ -82,8 +77,26 @@ package AUTOSAR {
         doc /* An AUTOSAR OS periodic task that activates runnables on a fixed schedule.
              * Inherits safetyLevel and supplier from AutomotiveElement.
              */
-        attribute timing : PeriodicTiming;
-        attribute priority : Integer;
+        attribute osTaskPeriod[0..1] : Real; // Period in seconds, optional for non-periodic tasks
+        attribute osTaskEventRef[0..*] : Event;
+        attribute osTaskPriority[1..1] : Integer;
+        port sr : SenderReceiverIF[0..*];
+        port op : ClientServerIF[0..*];
+    }
+
+    // ─── OS container ───────────────────────────────────────────────
+
+    item def EcucPartition :> AutomotiveElement {
+        doc /* ECU Configuration Partition reference for OS application partitioning. */
+    }
+
+    abstract part def OsApplication {
+        doc /* An AUTOSAR OS Application — a container for software components and tasks.
+             * Inherits safetyLevel and supplier for traceability.
+             */
+        attribute osAppEcucPartitionRef : EcucPartition;
+        attribute osTrusted : Boolean; // Indicates if the application is trusted (e.g., for safety-critical functions)
+        part osAppTaskRef : OsTask[0..*];
     }
 
     // ─── Software Component Hierarchy ────────────────────────────────
@@ -114,15 +127,4 @@ package AUTOSAR {
     part def ParameterSwC :> AtomicSwC {
         doc /* Service SwC providing BSW service abstractions (diagnostics, NvM, etc.). */
     }
-
-    // ─── Runtime Environment (RTE) ───────────────────────────────────
-
-    part def RTE :> AutomotiveElement {
-        doc /* The AUTOSAR Runtime Environment (RTE) layer.
-             * Mediates all inter-SwC communication through generated middleware.
-             * In a SysML v2 composition, interface connections between SwC ports
-             * represent the RTE communication channels.
-             */
-    }
-
 }

@@ -15,12 +15,12 @@ package BrakeControlSw {
 
     // ─── Concrete Data Elements ──────────────────────────────────────
 
-    item def WheelSpeedData :> DataElement {
+    attribute def WheelSpeedData :> DataElement {
         doc /* Wheel speed measurement data element. */
         attribute speedRpm : Real;
     }
 
-    item def BrakeForceCommand :> DataElement {
+    attribute def BrakeForceCommand :> DataElement {
         doc /* Brake force actuation command data element. */
         attribute forceNewton : Real;
     }
@@ -39,19 +39,16 @@ package BrakeControlSw {
 
     port def WheelSpeedIF :> SenderReceiverIF {
         doc /* S/R interface carrying wheel speed data, qualified ASIL D. */
-        :>> safetyLevel = ASIL::ASIL_D;
         out :>> dataElement : WheelSpeedData;
     }
 
     port def BrakeForceIF :> SenderReceiverIF {
         doc /* S/R interface carrying brake force commands, qualified ASIL D. */
-        :>> safetyLevel = ASIL::ASIL_D;
         out :>> dataElement : BrakeForceCommand;
     }
 
     port def DiagServiceIF :> ClientServerIF {
         doc /* C/S interface for diagnostic services, qualified ASIL B. */
-        :>> safetyLevel = ASIL::ASIL_B;
         in :>> request : DiagRequest;
         out :>> response : DiagResponse;
     }
@@ -114,8 +111,8 @@ package BrakeControlSw {
 
     part task10ms : OsTask {
         doc /* 10 ms high-priority task for safety-critical brake runnables. */
-        :>> timing { :>> period = 10 [ms]; }
-        :>> priority = 5;
+        :>> osTaskPeriod { :>> period = 10 [ms]; }
+        :>> osTaskPriority = 5;
         :>> safetyLevel = ASIL::ASIL_D;
         :>> supplier.name = "OsVendor";
 
@@ -130,8 +127,8 @@ package BrakeControlSw {
 
     part task100ms : OsTask {
         doc /* 100 ms lower-priority task for diagnostic runnables. */
-        :>> timing { :>> period = 100 [ms]; }
-        :>> priority = 3;
+        :>> osTaskPeriod { :>> period = 100 [ms]; }
+        :>> osTaskPriority = 3;
         :>> safetyLevel = ASIL::ASIL_B;
         :>> supplier.name = "OsVendor";
 
@@ -169,12 +166,6 @@ package BrakeControlSw {
         part diagComponent : BrakeDiagSwC {
             :>> safetyLevel = ASIL::ASIL_B;
             :>> supplier.name = "DiagSupplier";
-        }
-
-        // RTE instance mediating inter-SwC communication
-        part rte : RTE {
-            :>> safetyLevel = ASIL::ASIL_D;
-            :>> supplier.name = "RTEGenerator";
         }
 
         // RTE-mediated S/R assembly connectors
