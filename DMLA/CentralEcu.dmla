@@ -253,29 +253,30 @@ package CentralEcu {
     }
 
     operation Bool DynamicExample() {
-        SharedMemoryPort portInstance = Create(SharedMemoryPort, true)
+        SharedMemoryPort portInstance = Create(SharedMemoryPort, false)
             .Set(SharedMemoryPort.safetyLevel, ASIL_B)
             ;
 
-        SoC soCdeployment = Create(SoC_A, true)
+        SoC soCdeployment = Create(SoC_B, false)
             .Set(SoC.ports, portInstance)
             .AddValue(SoC.softwares, ACC)
             .AddValue(SoC.softwares, brakeControl)
             .AddValue(SoC.softwares, swUpManager)
             ;
 
-        CentralECU domainController = Create(CentralECU, true)
+        CentralECU domainController = Create(CentralECU, false)
             .Set(CentralECU.supplier, "Tier1Supplier-A")
             .AddValue(CentralECU.socs, soCdeployment)
             ;
 
-        try {
-            ValidateSelf(portInstance);
-            return true;
-        }
-        catch (ValidationException exc) {
-            PrintError((exc.Message)!! as String);
+        ValidationError[] result = [];
+        result = ValidateGlobal(CentralECU,domainController,null);
+        foreach (ValidationError error in result) {
+            if(error.Message != null) PrintError(error.Message!! as String);
+            else PrintError("Unexpected validation error\n\r"); 
             return false;
         }
+        // Failing annotaton on slot socs of CentralECU is not found!
+        return true;
     }
 }
