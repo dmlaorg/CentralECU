@@ -1,16 +1,12 @@
 package CentralEcu {
     import Automotive
+    import SysMLv2
 
     /*
      *
      * 											Basic building blocks
      * 										----------------------------
      */
-
-    entity Part : Classifier {
-        @Type = {TypeRef = Port;}
-        new slot ports : Base.Fields;
-    }
 
     @AutomotiveElement
     entity CentralEcuElement : Part {
@@ -25,18 +21,6 @@ package CentralEcu {
         new slot supplier : Base.Fields;
     }
 
-    entity Port : Classifier {
-
-        @Cardinality = {Min = 1; Max = 1;}
-        @Type = {TypeRef = Interface;}
-        new slot interface : Base.Fields;
-    }
-    
-    entity Input : Port {}
-    entity Output : Port {}
-
-    // Base elements for model connection
-    entity Interface : Part {}
     /*
      *
      * 											CentralEcu components
@@ -134,28 +118,6 @@ package CentralEcu {
         @Cardinality= {Min = 1; Max = 1;}
         @Type = {TypeRef = Int;}
         new slot sizeKB : Base.Fields;
-    }
-
-    operation Bool Connect(Part from, Part to, Interface interfaceInstance){
-        Bool fromConnected = false;
-        Bool toConnected = false;
-        foreach (Base attrib in from.GetAllSlots()) {
-            if ((attrib is Output) && getSlotValue(attrib.interface as Interface) == null) {
-                attrib.Set(Output.interface,interfaceInstance);
-                interfaceInstance.AddValue(Interface.ports,attrib);
-                PrintLn("Connected ${GetID(from)} to ${GetID(interfaceInstance)}");
-                fromConnected = true;
-            }
-        }
-        foreach (Base attrib in to.GetAllSlots()) {
-            if ((attrib is Input) && getSlotValue(attrib.interface as Interface) == null) {
-                attrib.Set(Input.interface,interfaceInstance);
-                interfaceInstance.AddValue(Interface.ports,attrib);
-                PrintLn("Connected ${GetID(to)} to ${GetID(interfaceInstance)}");
-                toConnected = true;
-            }
-        }
-        return fromConnected && toConnected;
     }
 
     /*
