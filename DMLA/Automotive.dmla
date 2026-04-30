@@ -7,13 +7,15 @@ package Automotive {
 
     entity AutomotiveType : Base {}
     // ASIL as enum 
-    entity ASIL : AutomotiveType {
+    entity ASIL : AutomotiveType
+    {
         @Cardinality = {Min = 1; Max = 1;}
         @Type = {TypeRef = Int;}
-        new slot value : Base.Fields;
+        new slot value;
         //1...5 QM, A..., D
 
-		override operation ValidationError[] Validate(Object subject, Base? context=null) {
+		override operation ValidationError[] Validate(Object subject, Base? context=null)
+        {
 			ValidationError[] result = [];
             if (!(subject is ASIL))
             {
@@ -30,9 +32,11 @@ package Automotive {
             Int? safetyLevelValue = getSlotValue(subject.value) as Int;
             if (safetyLevelValue != null) {
                 Bool isASILvalue = false;
-                foreach (ASIL lvl in getInstances(ASIL, false)) { 
+                foreach (ASIL lvl in getInstances(ASIL, false))
+                { 
                     // collect valid ASIL definitions
-                    if ((getSlotValue(lvl.value) as Int) == safetyLevelValue!!) { 
+                    if ((getSlotValue(lvl.value) as Int) == safetyLevelValue!!)
+                    { 
                         // and search for valid value
                         isASILvalue = true;
                         break;
@@ -88,7 +92,8 @@ package Automotive {
     entity Telematic : AutomotiveDomain {}
     entity Trailer : AutomotiveDomain {}
 
-    entity Supplier : Classifier {
+    entity Supplier
+    {
         @Type= { TypeRef=Bool; }
         @Cardinality= {Min= 1; Max=1; }
         new slot isInternal;
@@ -115,27 +120,27 @@ package Automotive {
     }
 
     // Automotive concepts enforced as contracts
-    entity AutomotiveElement : Contract {
-        
+    entity AutomotiveElement : Contract
+    {
         @Cardinality = {Max = 1;}
         @Type = {TypeRef = ASIL;} 
         @ContractSlot
-        new slot safetyLevel : Base.Fields;
+        new slot safetyLevel;
 
         @Cardinality = {Max = 1;}
         @Type = {TypeRef = Supplier;}
         @ContractSlot
-        new slot supplier : Base.Fields;
+        new slot supplier;
     }
 
-    entity AutomotiveRequirement : AutomotiveElement {
-
+    entity AutomotiveRequirement : AutomotiveElement
+    {
         @Cardinality = {Min = 1; Max = 1;}
         @Type = {TypeRef = String;}
-        new slot id : Base.Fields;
+        new slot id;
 
         @Cardinality = {Max = 1;}
         @Type = {TypeRef = String;}
-        new slot text : Base.Fields;
+        new slot text;
     }
 }

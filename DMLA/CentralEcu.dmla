@@ -9,16 +9,20 @@ package CentralEcu {
      */
 
     @AutomotiveElement
-    entity CentralEcuElement : Part {
+    @Part
+    entity CentralEcuElement  
+    {
         @Cardinality = {Max = 1;}
         @Type = {TypeRef = ASIL;} 
-        @ContractSlot
-        new slot safetyLevel : Base.Fields;
+        new slot safetyLevel;
 
         @Cardinality = {Max = 1;}
         @Type = {TypeRef = Supplier;}
+        new slot supplier;
+
+        @Type = {TypeRef = Port;}
         @ContractSlot
-        new slot supplier : Base.Fields;
+        new slot ports;
     }
 
     /*
@@ -29,56 +33,63 @@ package CentralEcu {
 
     entity CentralEcuComposition : CentralEcuElement {}
 
-    entity CentralECU : CentralEcuComposition {
+    entity CentralECU : CentralEcuComposition 
+    {
 
         @Cardinality= {Min = 1;}
         @Type = {TypeRef = SoC;}
-        new slot socs : Base.Fields;
+        new slot socs;
     }
 
     // AutomotiveElement as a Contract makes it easy to reintroduce at any point of a meta-chain
     @AutomotiveElement
-    entity SharedMemoryPort : Port {
+    entity SharedMemoryPort : Port 
+    {
+        @Type = {TypeRef = MemoryRegion;}
+        new slot memory;
 
         @Type = {TypeRef = MemoryRegion;}
-        new slot memory : Base.Fields;
-
-        @Type = {TypeRef = MemoryRegion;}
-        new slot accessedMemory : Base.Fields;
+        new slot accessedMemory;
 
         @Cardinality = {Max = 1;}
         @Type = {TypeRef = ASIL;} 
-        @ContractSlot
-        new slot safetyLevel : Base.Fields;
+        new slot safetyLevel;
 
         @Cardinality = {Max = 1;}
         @Type = {TypeRef = Supplier;}
-        @ContractSlot
-        new slot supplier : Base.Fields;
+        new slot supplier;
     }
 
-    entity SharedMemoryInterface : Interface {}
+    @Interface
+    entity SharedMemoryInterface 
+    {
+        @Cardinality = {Min = 2;}
+        @Type = {TypeRef = SharedMemoryPort;}
+        new slot ports;
+    }
 
-    entity SoC : CentralEcuComposition {
+    entity SoC : CentralEcuComposition 
+    {
 
         @Cardinality= {Min = 1;}
         @Type = {TypeRef = Core;}        
-        new slot cores : Base.Fields;
+        new slot cores;
 
         @Cardinality= {Min = 1;}
         @Type = {TypeRef = EmbeddedSoftware;}        
-        new slot softwares : Base.Fields;
+        new slot softwares;
 
         @Cardinality= {Min = 1;}
         @Type = {TypeRef = MemoryModule;}        
-        new slot memory : Base.Fields;
+        new slot memory;
 
         @Cardinality= {Min = 1;}
         @Type = {TypeRef = SharedMemoryPort;}        
-        new slot ports : Base.Fields;
+        new slot ports;
     }
 
-    entity Mcu : SoC {
+    entity Mcu : SoC
+    {
         @Annotation_Omit
         slot ports = {};
 
@@ -86,38 +97,41 @@ package CentralEcu {
         slot cores;
     }
 
-    entity Core : CentralEcuElement {
+    entity Core : CentralEcuElement 
+    {
 
         @Cardinality= {Max = 1;}
         @Type = {TypeRef = Real;}
-        new slot frequencyHz : Base.Fields;
+        new slot frequencyHz;
 
         @Cardinality= {Max = 1;}
         @Type = {TypeRef = Bool;}
-        new slot isLockstep : Base.Fields;
+        new slot isLockstep;
     }
 
     entity EmbeddedSoftware : CentralEcuComposition {}
     entity PowerModule : CentralEcuElement {}
-    entity MemoryModule : CentralEcuElement {
+    entity MemoryModule : CentralEcuElement 
+    {
 
         @Cardinality= {Min = 1; Max = -1;}
         @Type = {TypeRef = MemoryRegion;}
-        new slot memoryRegion : Base.Fields;
+        new slot memoryRegion;
     }
-    entity MemoryRegion : Classifier {
+    entity MemoryRegion  
+    {
 
         @Cardinality= {Min = 1; Max = 1;}
         @Type = {TypeRef = Int;}
-        new slot startAddress : Base.Fields;
+        new slot startAddress;
 
         @Cardinality= {Min = 1; Max = 1;}
         @Type = {TypeRef = Int;}
-        new slot endAddress : Base.Fields;
+        new slot endAddress;
         
         @Cardinality= {Min = 1; Max = 1;}
         @Type = {TypeRef = Int;}
-        new slot sizeKB : Base.Fields;
+        new slot sizeKB;
     }
 
     /*
@@ -127,22 +141,24 @@ package CentralEcu {
      */
 
     // Requirements are modeled as Contracts
-    entity MinimumNumberOfMemoryBanks : Contract {
-    //    slot id = "OTA-1-1";
-    //    slot text = "The system shall have at least two separate non-volatile memory banks.";
-    //    slot safetyLevel = ASIL_D;
-    //    slot supplier = {
-    //        isInternal = true;
-    //        domain = Telematic;
-    //        name = "InternalSupplier";
-    //        id = "INT-001";
-    //        contactinfo = "Budapest, Hungary";
-    //    };
+    entity MinimumNumberOfMemoryBanks : AutomotiveRequirement 
+    {
+        slot id = "OTA-1-1";
+        slot text = "The system shall have at least two separate non-volatile memory banks.";
+        slot safetyLevel = ASIL_D;
+        slot supplier =
+        {
+            isInternal = true;
+            domain = Telematic;
+            name = "InternalSupplier";
+            id = "INT-001";
+            contactinfo = "Budapest, Hungary";
+        };
 
         @Cardinality = {Min = 2;}
         @Type = {TypeRef = MemoryModule;} 
         @ContractSlot
-        new slot memory : Base.Fields;
+        new slot memory;
     }
 
     entity ThirdPartySupplier : Supplier { slot isInternal = false; }
@@ -151,44 +167,59 @@ package CentralEcu {
     entity Tier1Supplier_B : ThirdPartySupplier { slot name = "Tier1Supplier_B"; }
     entity Tier1Supplier_A : ThirdPartySupplier { slot name = "Tier1Supplier_A"; }
 
-    //entity flash1 : MemoryModule {
-    //    memoryRegion = {sizeKB = 512.1; safetyLevel = ASIL_QM; supplier = Tier1Supplier_A;}
-    //}
-    //entity flash2 : MemoryModule {
-    //    memoryRegion = {sizeKB = 512; safetyLevel = ASIL_QM; supplier = Tier1Supplier_A;}
-    //}
+
+    entity flash1 : MemoryModule {
+        slot memoryRegion = 
+        {
+            sizeKB = 512.1;
+            safetyLevel = ASIL_QM;
+            supplier = Tier1Supplier_A;
+        };
+    }
+    entity flash2 : MemoryModule {
+        slot memoryRegion = 
+        {
+            sizeKB = 512;
+            safetyLevel = ASIL_QM;
+            supplier = Tier1Supplier_A;
+        };
+    }
 
     @MinimumNumberOfMemoryBanks
-    entity SoC_A : SoC {
+    entity SoC_A : SoC 
+    {
         slot supplier = Renesas;
         slot cores = [cr7, ca57, ca57, ca53, ca53];
         slot safetyLevel = ASIL_D;
 
         @Cardinality = {Min = 2;}
-        @ContractSlot
-        new slot memory;
+        slot memory;
     }
 
     @MinimumNumberOfMemoryBanks
-    entity SoC_B : SoC {
+    entity SoC_B : SoC 
+    {
         slot safetyLevel = ASIL_B;
     }
 
-    entity cr7 : Core {
+    entity cr7 : Core 
+    {
         slot supplier = Arm;
         slot frequencyHz = 800000000.0;
         slot isLockstep = true;
         slot safetyLevel = ASIL_D;
     }
 
-    entity ca57 : Core {
+    entity ca57 : Core 
+    {
         slot supplier = Arm;
         slot frequencyHz = 1900000000.0;
         slot isLockstep = false;
         slot safetyLevel = ASIL_B;
     }
 
-    entity ca53 : Core {
+    entity ca53 : Core 
+    {
         slot supplier = Arm;
         slot frequencyHz = 1500000000;
         // validation logic catches type non-conformity: Int vs Real
@@ -196,49 +227,66 @@ package CentralEcu {
         slot safetyLevel = ASIL_B;
     }
 
-    entity ACC : EmbeddedSoftware {
+    entity ACC : EmbeddedSoftware 
+    {
         slot safetyLevel = ASIL_B;
     }
 
-    entity concreteACC : ACC {
+    entity concreteACC : ACC 
+    {
         slot supplier = Tier1Supplier_B;
     }
 
-    entity brakeControl : EmbeddedSoftware {
+    entity brakeControl : EmbeddedSoftware 
+    {
         slot safetyLevel = ASIL_D;
         slot supplier = Tier1Supplier_A;
     }
 
-    entity swUpManager : EmbeddedSoftware {
+    entity swUpManager : EmbeddedSoftware 
+    {
         slot safetyLevel = QM;
         slot supplier = Tier1Supplier_A;
     }
 
-    operation Bool DynamicExample() {
-        SharedMemoryPort portInstance = Create(SharedMemoryPort, false)
+    operation Bool RuntimeExample() 
+    {
+        PrintEntity(flash1, false, 3);
+        flash2 flash2instance = Create(flash2, false, "flash2instance");
+        PrintEntity(flash2instance, false, 3);
+
+        SharedMemoryPort portInstance = Create(SharedMemoryPort, false,"portInstance")
             .Set(SharedMemoryPort.safetyLevel, ASIL_B)
             ;
 
-        SoC soCdeployment = Create(SoC_B, false)
+        SoC soCdeployment = Create(SoC_B, false, "soCdeployment")
             .Set(SoC.ports, portInstance)
             .AddValue(SoC.softwares, ACC)
             .AddValue(SoC.softwares, brakeControl)
             .AddValue(SoC.softwares, swUpManager)
             ;
 
-        CentralECU domainController = Create(CentralECU, false)
+        CentralECU domainController = Create(CentralECU, false, "domainController")
             .Set(CentralECU.supplier, "Tier1Supplier-A")
             .AddValue(CentralECU.socs, soCdeployment)
             ;
 
         ValidationError[] result = [];
-        result = ValidateGlobal(CentralECU,domainController,null);
-        foreach (ValidationError error in result) {
-            if(error.Message != null) PrintError(error.Message!! as String);
-            else PrintError("Unexpected validation error\n\r"); 
-            return false;
+        result = ValidateSelf(domainController);
+        addAll(result, ValidateSelf(SoC_B));
+        addAll(result, ValidateSelf(portInstance));
+
+        if (count(result) == 0) {
+            PrintLn("RuntimeExample validation PASSED.", "green");
+            return true;
         }
-        // Failing annotaton on slot socs of CentralECU is not found!
-        return true;
+
+        foreach (ValidationError error in result) {
+            String errorMessage= "RuntimeExample validation error 
+                [${error.Get(ValidationError.ErrorCode)}] 
+                ('${error.Get(ValidationError.Message)}').\n";
+            PrintError(errorMessage);
+        }
+        return false;
     }
 }

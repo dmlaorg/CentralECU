@@ -1,5 +1,6 @@
 DMLA/bootstrap.dmla
-DMLA/Tests.dmla
+DMLA/testing.dmla
+DMLA/unittests.dmla
 DMLA/workspace.dmla
 
 output

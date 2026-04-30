@@ -4,7 +4,8 @@ private import AUTOSAR::*;
 
 attribute partition1 : EcucPartition { :>> safetyLevel = ASIL::ASIL_D; }
 attribute partition2: EcucPartition { :>> safetyLevel = ASIL::QM; }
-attribute def var {attribute elem1 : Rational; attribute elem2 : String; }
+attribute basicVar : sint16, DataElement;
+attribute compositeVar : DataElement {attribute elem1 : Rational; attribute elem2 : String; }
 attribute backgroundEvent : Event { :>> eventID = 1;}
 
 part root : CompositionSwC // root composition
@@ -52,18 +53,16 @@ part osApplciationQM : OsApplication {
  * provided by 'aswc1'
  * requested by 'task2' */
 interface CS_ASWC1_op connect root.cswc1.cswc3.aswc1.op to root.cswc1.cswc3.aswc1.task2.op;
-/* sender receiver interface 'sr1' data 'var'
+/* sender receiver interface 'sr1' data 'basicVar'
  * provided by 'task2' and 'task4'
  * requested by 'task2' and 'task4' */
-flow sr1 of var from 
+flow sr1 of basicVar from 
 root.cswc1.cswc3.aswc1.task2.sr to root.cswc1.cswc3.cswc4.aswc3.task4.sr;
-/* sender receiver interface 'sr2' data 'var'
+/* sender receiver interface 'sr2' data 'compositeVar'
  * provided by 'task1', 'task2' and 'task4',
  * requested by 'task3' */
-interface def sr2 {
-    end[0..*] port provider : SenderReceiverIF;
-    end port consumer : SenderReceiverIF;
-    flow of var from root.cswc1.cswc3.aswc1.task1.sr to root.cswc2.aswc2.task3.sr;
-    flow of var from root.cswc1.cswc3.aswc1.task2.sr to root.cswc2.aswc2.task3.sr;
-    flow of var from root.cswc1.cswc3.cswc4.aswc3.task4.sr to root.cswc2.aswc2.task3.sr;
+interface sr2 {
+    flow of compositeVar from root.cswc1.cswc3.aswc1.task1.sr to root.cswc2.aswc2.task3.sr;
+    flow of compositeVar from root.cswc1.cswc3.aswc1.task2.sr to root.cswc2.aswc2.task3.sr;
+    flow of compositeVar from root.cswc1.cswc3.cswc4.aswc3.task4.sr to root.cswc2.aswc2.task3.sr;
 }

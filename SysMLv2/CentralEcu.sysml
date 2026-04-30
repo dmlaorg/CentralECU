@@ -20,7 +20,7 @@ package CentralEcu {
         subject soc : SoC;
         attribute memBanksRequired : Integer = 2;
 
-        assume constraint { soc.safetyLevel == ASIL::ASIL_D }
+        assume constraint { soc.safetylevel > ASIL::QM }
 
         require constraint { size(soc.memory) >= memBanksRequired }
     }
@@ -41,7 +41,7 @@ package CentralEcu {
         in attribute accessedMemory : MemoryRegion;
     }
 
-    interface def SharedMemoryInterface {
+    interface sharedMemoryInterface {
         end [0..*] port read : SharedMemoryPort;
         end port write  : ~SharedMemoryPort; 
 
@@ -174,7 +174,7 @@ package CentralEcu {
         part socInstanceB : SoC_B;
         :>> socs : SoC[2] = (socInstanceA, socInstanceB);
 
-        interface : SharedMemoryInterface connect
+        interface : sharedMemoryInterface connect
             consumerPort ::> socInstanceA.sharedMem to 
             supplierPort references socInstanceB.sharedMem;
 

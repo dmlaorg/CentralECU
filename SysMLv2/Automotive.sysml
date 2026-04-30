@@ -48,7 +48,7 @@ package Automotive {
         attribute name : String;
         attribute id : String;
         attribute contactInfo : String[0..*];
-        ref alternatives : Supplier[0..*];
+        ref alternatives[0..*];
     }
 
     abstract item def AutomotiveElement {

@@ -1,44 +1,71 @@
 package SysMLv2 {
+    import Testing
     /*
      *
      * 											Systems Modeling Language v2 building blocks
      * 										----------------------------------------------------
      */
 
-    // A subset of SysMLv2 concepts offered as meta entities, with focus on Sofwtare Architecture Modeling
-    entity Part : Classifier {
+    // A subset of SysMLv2 concepts offered as contracts, with focus on Software Architecture Modeling
+    entity Part : Contract {
         @Type = {TypeRef = Port;}
-        new slot ports : Base.Fields;
+        @ContractSlot
+        new slot ports;
     }
 
-    entity Port : Classifier {
+    entity Port {
 
         @Cardinality = {Min = 1; Max = 1;}
         @Type = {TypeRef = Interface;}
-        new slot interface : Base.Fields;
+        @ContractSlot
+        new slot interface;
+
+        @Cardinality = {Min = 1; Max = 1;}
+        @Type = {TypeRef = PortDirection;}
+        @ContractSlot
+        new slot direction; // Direction can be "in", "out", "inout"
     }
     
-    entity Input : Port {}
-    entity Output : Port {}
+    entity PortDirection {}
+    entity In : PortDirection {}
+    entity Out : PortDirection {}
+    entity InOut : PortDirection {}
 
-    // Base elements for model connection
-    entity Interface : Part {}
+    // Concept for part connection
+    @Part
+    entity Interface : Contract {
+        @Cardinality = { Min = 2;}
+        @Type = {TypeRef = Port;}
+        @ContractSlot
+        new slot ports;
+
+        @ContractSlot
+        new slot payload;
+    }
     
-    operation Bool Connect(Part from, Part to, Interface interfaceInstance){
+    // Concept for runtime connection
+    operation Bool Connect(Base from, Base to, Base interfaceInstance){
         Bool fromConnected = false;
         Bool toConnected = false;
-        foreach (Base attrib in from.GetAllSlots()) {
-            if ((attrib is Output) && getSlotValue(attrib.interface as Interface) == null) {
-                attrib.Set(Output.interface,interfaceInstance);
-                interfaceInstance.AddValue(Interface.ports,attrib);
+        Base[] blocks = [from, to, interfaceInstance];
+        foreach (Base element in blocks) {
+            if (!element.HasAnnotation(Part, true) && !element.HasAnnotation(Interface, true)) {
+                PrintLn("Error: ${GetID(element)} is not a Part, or Interface and cannot be connected.");
+                return false;
+            }
+        }
+        foreach (Port portInstance in from.GetAllSlots()) {
+            if ((portInstance.direction is Out) && getSlotValue(portInstance.interface as Interface) == null) {
+                portInstance.Set(Port.interface,interfaceInstance);
+                interfaceInstance.AddValue(Interface.ports,portInstance);
                 PrintLn("Connected ${GetID(from)} to ${GetID(interfaceInstance)}");
                 fromConnected = true;
             }
         }
-        foreach (Base attrib in to.GetAllSlots()) {
-            if ((attrib is Input) && getSlotValue(attrib.interface as Interface) == null) {
-                attrib.Set(Input.interface,interfaceInstance);
-                interfaceInstance.AddValue(Interface.ports,attrib);
+        foreach (Port portInstance in to.GetAllSlots()) {
+            if ((portInstance.direction is In) && getSlotValue(portInstance.interface as Interface) == null) {
+                portInstance.Set(Port.interface,interfaceInstance);
+                interfaceInstance.AddValue(Interface.ports,portInstance);
                 PrintLn("Connected ${GetID(to)} to ${GetID(interfaceInstance)}");
                 toConnected = true;
             }
