@@ -116,13 +116,11 @@ package BrakeControlSw {
         :>> safetyLevel = ASIL::ASIL_D;
         :>> supplier.name = "OsVendor";
 
-        action taskBody {
-            action readSpeed : ReadWheelSpeedRunnable;
-            action controlCycle : BrakeControlRunnable;
-            action applyBrake : ApplyBrakeRunnable;
-            first readSpeed then controlCycle;
-            first controlCycle then applyBrake;
-        }
+        action readSpeed : ReadWheelSpeedRunnable;
+        action controlCycle : BrakeControlRunnable;
+        action applyBrake : ApplyBrakeRunnable;
+        first readSpeed then controlCycle;
+        first controlCycle then applyBrake;
     }
 
     part task100ms : OsTask {
@@ -132,9 +130,7 @@ package BrakeControlSw {
         :>> safetyLevel = ASIL::ASIL_B;
         :>> supplier.name = "OsVendor";
 
-        action taskBody {
-            action diagHandler : DiagServiceRunnable;
-        }
+        action diagHandler : DiagServiceRunnable;
     }
 
     // ─── Brake System as EmbeddedSoftware ────────────────────────────

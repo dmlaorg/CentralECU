@@ -1,5 +1,4 @@
 package SysMLv2 {
-    import Testing
     /*
      *
      * 											Systems Modeling Language v2 building blocks
@@ -7,6 +6,7 @@ package SysMLv2 {
      */
 
     // A subset of SysMLv2 concepts offered as contracts, with focus on Software Architecture Modeling
+
     entity Part : Contract {
         @Type = {TypeRef = Port;}
         @ContractSlot
@@ -17,12 +17,10 @@ package SysMLv2 {
 
         @Cardinality = {Min = 1; Max = 1;}
         @Type = {TypeRef = Interface;}
-        @ContractSlot
         new slot interface;
 
         @Cardinality = {Min = 1; Max = 1;}
         @Type = {TypeRef = PortDirection;}
-        @ContractSlot
         new slot direction; // Direction can be "in", "out", "inout"
     }
     
@@ -43,7 +41,7 @@ package SysMLv2 {
         new slot payload;
     }
     
-    // Concept for runtime connection
+    // Concept for runtime block connection
     operation Bool Connect(Base from, Base to, Base interfaceInstance){
         Bool fromConnected = false;
         Bool toConnected = false;
@@ -71,5 +69,126 @@ package SysMLv2 {
             }
         }
         return fromConnected && toConnected;
+    }
+
+    // Concept for M2T transformation
+    operation String GenerateCode(Base root) {
+        String output = "";
+        
+        foreach (Base element in getInstances(root, true)) {
+            if (!element.HasAnnotation(FinalInstance,false))
+            {
+                continue; // skip intermediate instances
+            }
+            if (element.HasAnnotation(Interface, true))
+            {
+                output = output + GenerateInterfaceCode(element, 0) + "\n\n";
+            }
+            else if (element.HasAnnotation(Part, true))
+            {
+                output = output + GeneratePartCode(element, 0) + "\n\n";
+            }
+            else
+            {
+                output = output + "// Element is not a Part or Interface.\n";
+            }
+        }
+        
+        return output;
+    }
+
+    operation String GeneratePartCode(Base part, Int indentLevel) {
+        String code = "";
+        String indent = "";
+        Int i = 0;
+        while (i < indentLevel) {
+            indent = indent + "    ";
+            i = i + 1;
+        }
+
+        Base partType = part.GetAttributeByType(Part, false);
+        code = code + "${indent}part ${GetLocalID(part)} : ${GetLocalID(partType)}\n";
+        code = code + "${indent}{\n";
+
+        // Generate nested parts from all slots
+        Base[] allSlots = part.GetAllSlots();
+        code = code + "${indent}    // DEBUG: Total slots: ${count(allSlots)}\n";
+        
+        foreach (Base element in allSlots) {
+            code = code + "${indent}    // DEBUG: Processing element: ${GetID(element)}\n";
+            if (element.HasAnnotation(Part, true)) {
+                code = code + GeneratePartCode(element, indentLevel + 1);
+            }
+        }
+
+        // Generate port definitions from ports slot
+        code = code + "${indent}    // DEBUG: Accessing ports slot\n";
+        Object[] ports = part.GetAll(Part.ports);
+        if (ports != null) {
+            code = code + "${indent}    // DEBUG: Ports slot found\n";
+            foreach (Port port in ports) {
+                code = code + GeneratePortCode(port, indentLevel + 1);
+            }
+        } else {
+            code = code + "${indent}    // DEBUG: No ports slot\n";
+        }
+        code = code + "${indent}}\n";
+        return code;
+    }
+
+    operation String GeneratePortCode(Port port, Int indentLevel) {
+        String code = "";
+        String indent = "";
+        Int i = 0;
+        while (i < indentLevel) {
+            indent = indent + "    ";
+            i = i + 1;
+        }
+
+        String direction = "";
+        if (port.direction is Out) {
+            direction = "out";
+        } else if (port.direction is In) {
+            direction = "in";
+        } else if (port.direction is InOut) {
+            direction = "inout";
+        }
+
+        Interface iface = port.interface as Interface;
+        String ifaceName = "UnknownInterface";
+        if (iface != null) {
+            ifaceName = GetLocalID(iface);
+        }
+
+        code = code + "${indent}${direction} ${GetLocalID(port)} : ${ifaceName};\n";
+        return code;
+    }
+
+    operation String GenerateInterfaceCode(Base interface, Int indentLevel) {
+        String code = "";
+        String indent = "";
+        Int i = 0;
+        while (i < indentLevel) {
+            indent = indent + "    ";
+            i = i + 1;
+        }
+
+        code = code + "${indent}interface ${GetLocalID(interface)} connect";
+        indent = indent + "    ";
+
+        // Generate ports from ports slot
+        Object[] ports = interface.GetAll(Interface.ports);
+        if (count(ports) == 2) {
+            code = code + " ${GetLocalID(ports[0])} to ${GetLocalID(ports[1])};";
+        }
+        return code;
+    }
+
+    operation String GetTypeName(Base element) {
+        Base elementType = element.GetType();
+        if (elementType != null) {
+            return GetLocalID(elementType);
+        }
+        return "UnknownType";
     }
 }

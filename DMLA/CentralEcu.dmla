@@ -1,4 +1,5 @@
-package CentralEcu {
+package CentralEcu
+{
     import Automotive
     import SysMLv2
 

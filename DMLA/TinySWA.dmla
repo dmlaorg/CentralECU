@@ -1,0 +1,122 @@
+package TinySWA
+{
+    import SysMLv2
+    import AUTOSAR
+    import PlatformTypes
+
+    /*
+     * Tiny Software Architecture - a minimal example for DMLA to SysMLv2 translation
+     * Demonstrates:
+     * - Part definitions with typed ports
+     * - Port directions (in/out)
+     * - Interface declarations  
+     * - SysMLv2 code generation output
+     */
+
+    entity base {}
+
+    // ===== Port prototypes =====
+    entity SensorDataInput : Port
+    {
+        slot direction = In;
+        slot interface = SensorDataInterface;
+    }
+
+    entity SensorDataOutput : Port
+    {
+        slot direction = Out;
+        slot interface = SensorDataInterface;
+    }
+
+    // ===== Software Component definitions =====
+
+    entity task10ms
+    {
+        @Cardinality = {Min = 0; Max = 1;}
+        new slot osTaskPeriod = 10;
+        
+        new slot ports = SensorDataInput;
+    }
+
+    @ApplicationSwC
+    entity SensorComponent : base
+    {
+        @Type = {TypeRef = Port;}
+        slot ports;
+
+        @OsTask
+        @Type = {TypeRef = task10ms;}
+        new slot tasks;
+    }
+
+    entity task20ms
+    {
+        @Cardinality = {Min = 0; Max = 1;}
+        new slot osTaskPeriod = 20;
+        
+        new slot ports = SensorDataInput;
+    }
+
+    @ApplicationSwC
+    entity ActuatorComponent : base
+    {
+        @Type = {TypeRef = Port;}
+        slot ports;
+
+        new slot tasks = task20ms;
+    }
+
+    @CompositionSwC
+    @FinalInstance
+    entity root : base
+    {
+        @Type = {TypeRef = Port;}
+        slot ports;
+
+        new slot swc1 = SensorComponent;
+        new slot swc2 = ActuatorComponent;
+    }
+
+    entity rootAfterFinalInstance : root {}
+
+    // ===== Interface definition =====
+    @SenderReceiverIF
+    entity SensorDataInterfaceProto : root
+    {
+        @Cardinality = { Min = 2;}
+        @Type = {TypeRef = Port;}
+        new slot ports;
+
+        @Type = {TypeRef = sint16;}
+        new slot payload = 2026;
+    }
+
+    @FinalInstance
+    entity SensorDataInterface : SensorDataInterfaceProto
+    {
+        slot portIn = SensorDataInput;
+        slot portOut = SensorDataOutput;
+
+        @Type = {TypeRef = sint16;}
+        new slot payload = 2026;
+    }
+
+    // ===== Code Generation Demo Operation =====
+    operation void SysMLv2CodeGenerationDemo()
+    {
+        PrintLn("");
+        PrintLn("========================================", "red");
+        PrintLn("   SysMLv2 Code Generation Demo START   ", "red");
+        PrintLn("========================================", "red");
+        PrintLn("");
+
+        String code = GenerateCode(root);
+        PrintLn(code);
+
+        PrintLn("");
+        PrintLn("========================================", "green");
+        PrintLn("    SysMLv2 Code Generation Demo END    ", "green");
+        PrintLn("========================================", "green");
+    }
+}
+

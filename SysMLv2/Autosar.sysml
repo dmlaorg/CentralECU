@@ -96,7 +96,7 @@ package AUTOSAR {
              */
         attribute osAppEcucPartitionRef : EcucPartition;
         attribute osTrusted : Boolean; // Indicates if the application is trusted (e.g., for safety-critical functions)
-        part osAppTaskRef : OsTask[0..*];
+        ref osAppTaskRef : OsTask[0..*];
     }
 
     // ─── Software Component Hierarchy ────────────────────────────────

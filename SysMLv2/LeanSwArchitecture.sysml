@@ -16,11 +16,11 @@ part root : CompositionSwC // root composition
             part aswc1 : ApplicationSwC { doc /* Application SWC */
                 part task1 : OsTask { :>> osTaskPeriod = 10 [ms];} // timer task
                 part task2 : OsTask { :>> osTaskPeriod = (); :>> osTaskEventRef = backgroundEvent; } // background task
-                out op : ClientServerIF { out :> response.returnCode : uint8; in :> param : sint16; } // server function
+                out op : ClientServerIF { out :> response.returnCode : uint8; in :> request.dataElement : sint16; } // server function
             }
             part cswc4 : CompositionSwC {
                 part aswc3 : ApplicationSwC { doc /* Application SWC */
-                    part task4 : OsTask { :>> osTaskPeriod = 10 [ms];} // timer task
+                    part task4 : OsTask;
                 }
             }
         }
@@ -34,6 +34,8 @@ part root : CompositionSwC // root composition
         }
     }
 }
+
+:>> root.cswc1.cswc3.cswc4.aswc3.task4.osTaskPeriod = 20[ms];  // timer task
 
 part osApplciationD : OsApplication {
     doc /* OS application for safety-critical software. */

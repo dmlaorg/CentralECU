@@ -1,0 +1,11 @@
+package PlatformTypes
+{
+    /*
+     *
+     * 											AUTOSAR Platform Types
+     * 										-------------------------------
+     */
+
+    entity uint8 : Int {}
+    entity sint16 : Int {}
+}
