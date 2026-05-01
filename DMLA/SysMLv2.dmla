@@ -30,11 +30,8 @@ package SysMLv2 {
     entity InOut : PortDirection {}
 
     // Concept for part connection
-    @Part
-    entity Interface : Contract {
+    entity Interface : Part {
         @Cardinality = { Min = 2;}
-        @Type = {TypeRef = Port;}
-        @ContractSlot
         new slot ports;
 
         @ContractSlot
@@ -53,7 +50,7 @@ package SysMLv2 {
             }
         }
         foreach (Port portInstance in from.GetAllSlots()) {
-            if ((portInstance.direction is Out) && getSlotValue(portInstance.interface as Interface) == null) {
+            if ((portInstance.direction is Out || portInstance.direction is InOut) && getSlotValue(portInstance.interface as Interface) == null) {
                 portInstance.Set(Port.interface,interfaceInstance);
                 interfaceInstance.AddValue(Interface.ports,portInstance);
                 PrintLn("Connected ${GetID(from)} to ${GetID(interfaceInstance)}");
@@ -61,7 +58,7 @@ package SysMLv2 {
             }
         }
         foreach (Port portInstance in to.GetAllSlots()) {
-            if ((portInstance.direction is In) && getSlotValue(portInstance.interface as Interface) == null) {
+            if ((portInstance.direction is In || portInstance.direction is InOut) && getSlotValue(portInstance.interface as Interface) == null) {
                 portInstance.Set(Port.interface,interfaceInstance);
                 interfaceInstance.AddValue(Interface.ports,portInstance);
                 PrintLn("Connected ${GetID(to)} to ${GetID(interfaceInstance)}");

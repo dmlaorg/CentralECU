@@ -16,12 +16,14 @@ package TinySWA
     entity base {}
 
     // ===== Port prototypes =====
+    @FinalInstance
     entity SensorDataInput : Port
     {
         slot direction = In;
         slot interface = SensorDataInterface;
     }
 
+    @FinalInstance
     entity SensorDataOutput : Port
     {
         slot direction = Out;
