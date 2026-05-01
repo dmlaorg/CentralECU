@@ -30,11 +30,8 @@ package SysMLv2 {
     entity InOut : PortDirection {}
 
     // Concept for part connection
-    @Part
-    entity Interface : Contract {
+    entity Interface : Part {
         @Cardinality = { Min = 2;}
-        @Type = {TypeRef = Port;}
-        @ContractSlot
         new slot ports;
 
         @ContractSlot
