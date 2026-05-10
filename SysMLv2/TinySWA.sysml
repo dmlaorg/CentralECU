@@ -18,18 +18,24 @@ package TinySWA
       *  Periodic OS tasks for scheduling runnables
       */
 
-    interface SensorDataInterface
-        connect task10ms.sr to task20ms.sr;
-
     part root : CompositionSwC
     {
-        part SensorComponent : ApplicationSwC
+        part aswc1 : ApplicationSwC
         {
-            part task10ms : OsTask { :>> osTaskPeriod = 10;}
+            part task10ms : OsTask 
+            { 
+                :>> osTaskPeriod = 10;
+            }
         }
-        part ActuatorComponent : ApplicationSwC
+        part aswc2 : ApplicationSwC
         {
-            part task20ms : OsTask { :>> osTaskPeriod = 20;}
+            part task20ms : OsTask 
+            { 
+                :>> osTaskPeriod = 20;
+            }
         }
     }
+    
+    interface SensorDataInterface
+        connect task10ms.sr to task20ms.sr;
 }

@@ -556,30 +556,14 @@
 		<Values/>
 		<InterpreterAnnotations/>
 	</Entity>
-	<Entity ID="AUTOSAR.OsTask.Part" Meta="SysMLv2.Part">
-		<Attributes/>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="AUTOSAR.OsTask" Meta="Bootstrap.Classifier">
+	<Entity ID="AUTOSAR.OsTask" Meta="SysMLv2.Part">
 		<Attributes>
 			<Attribute>
 				AUTOSAR.OsTask.osTaskPeriod
 			</Attribute>
-			<Attribute>
-				AUTOSAR.OsTask.Part
-			</Attribute>
 		</Attributes>
 		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				ImplicitMeta
-			</Annotation>
-		</InterpreterAnnotations>
+		<InterpreterAnnotations/>
 	</Entity>
 	<Entity ID="AUTOSAR.OsTask.osTaskPeriod.Cardinality" Meta="Bootstrap.Base.Fields.Cardinality">
 		<Attributes>
@@ -607,60 +591,9 @@
 		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="AUTOSAR.SenderReceiverIF" Meta="SysMLv2.Interface">
-		<Attributes>
-			<Attribute>
-				AUTOSAR.SenderReceiverIF.ports
-			</Attribute>
-			<Attribute>
-				AUTOSAR.SenderReceiverIF.payload
-			</Attribute>
-		</Attributes>
+		<Attributes/>
 		<Values/>
 		<InterpreterAnnotations/>
-	</Entity>
-	<Entity ID="AUTOSAR.SenderReceiverIF.ports.Cardinality" Meta="SysMLv2.Interface.ports.Cardinality">
-		<Attributes>
-			<Attribute>
-				AUTOSAR.SenderReceiverIF.ports.Cardinality.Min
-			</Attribute>
-		</Attributes>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="AUTOSAR.SenderReceiverIF.ports.Type" Meta="SysMLv2.Interface.ports.Type">
-		<Attributes>
-			<Attribute>
-				AUTOSAR.SenderReceiverIF.ports.Type.TypeRef
-			</Attribute>
-		</Attributes>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="AUTOSAR.SenderReceiverIF.ports.ContractSlot" Meta="SysMLv2.Interface.ports.ContractSlot">
-		<Attributes/>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="AUTOSAR.SenderReceiverIF.payload.ContractSlot" Meta="SysMLv2.Interface.payload.ContractSlot">
-		<Attributes/>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="AUTOSAR.ClientServerIF" Meta="SysMLv2.Interface">
 		<Attributes/>
@@ -697,10 +630,10 @@
 				CentralEcu.CentralEcuElement.ports
 			</Attribute>
 			<Attribute>
-				CentralEcu.CentralEcuElement.AutomotiveElement
+				CentralEcu.CentralEcuElement.Part
 			</Attribute>
 			<Attribute>
-				CentralEcu.CentralEcuElement.Part
+				CentralEcu.CentralEcuElement.AutomotiveElement
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -1381,13 +1314,13 @@
 				CentralEcu.MinimumNumberOfMemoryBanks.memory
 			</Attribute>
 			<Attribute>
-				CentralEcu.MinimumNumberOfMemoryBanks.Annotation_Omit.Automotive.AutomotiveElement.safetyLevel
+				CentralEcu.MinimumNumberOfMemoryBanks.Annotation_Omit.Automotive.AutomotiveElement.supplier
 			</Attribute>
 			<Attribute>
 				CentralEcu.MinimumNumberOfMemoryBanks.Annotation_Omit.Automotive.AutomotiveRequirement.text
 			</Attribute>
 			<Attribute>
-				CentralEcu.MinimumNumberOfMemoryBanks.Annotation_Omit.Automotive.AutomotiveElement.supplier
+				CentralEcu.MinimumNumberOfMemoryBanks.Annotation_Omit.Automotive.AutomotiveElement.safetyLevel
 			</Attribute>
 			<Attribute>
 				CentralEcu.MinimumNumberOfMemoryBanks.Annotation_Omit.Automotive.AutomotiveRequirement.id
@@ -1539,9 +1472,6 @@
 				CentralEcu.SoC_A.memory
 			</Attribute>
 			<Attribute>
-				CentralEcu.SoC_A.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel
-			</Attribute>
-			<Attribute>
 				CentralEcu.SoC_A.MinimumNumberOfMemoryBanks
 			</Attribute>
 			<Attribute>
@@ -1552,6 +1482,9 @@
 			</Attribute>
 			<Attribute>
 				CentralEcu.SoC_A.Annotation_Omit.CentralEcu.CentralEcuElement.supplier
+			</Attribute>
+			<Attribute>
+				CentralEcu.SoC_A.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -1585,10 +1518,10 @@
 				CentralEcu.SoC_B.safetyLevel
 			</Attribute>
 			<Attribute>
-				CentralEcu.SoC_B.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel
+				CentralEcu.SoC_B.MinimumNumberOfMemoryBanks
 			</Attribute>
 			<Attribute>
-				CentralEcu.SoC_B.MinimumNumberOfMemoryBanks
+				CentralEcu.SoC_B.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -1609,6 +1542,9 @@
 				CentralEcu.cr7.safetyLevel
 			</Attribute>
 			<Attribute>
+				CentralEcu.cr7.Annotation_Omit.CentralEcu.CentralEcuElement.supplier
+			</Attribute>
+			<Attribute>
 				CentralEcu.cr7.Annotation_Omit.CentralEcu.Core.isLockstep
 			</Attribute>
 			<Attribute>
@@ -1616,9 +1552,6 @@
 			</Attribute>
 			<Attribute>
 				CentralEcu.cr7.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel
-			</Attribute>
-			<Attribute>
-				CentralEcu.cr7.Annotation_Omit.CentralEcu.CentralEcuElement.supplier
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -1639,9 +1572,6 @@
 				CentralEcu.ca57.safetyLevel
 			</Attribute>
 			<Attribute>
-				CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.isLockstep
-			</Attribute>
-			<Attribute>
 				CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.supplier
 			</Attribute>
 			<Attribute>
@@ -1649,6 +1579,9 @@
 			</Attribute>
 			<Attribute>
 				CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel
+			</Attribute>
+			<Attribute>
+				CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.isLockstep
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -1669,16 +1602,16 @@
 				CentralEcu.ca53.safetyLevel
 			</Attribute>
 			<Attribute>
-				CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.frequencyHz
-			</Attribute>
-			<Attribute>
-				CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.isLockstep
-			</Attribute>
-			<Attribute>
 				CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.supplier
 			</Attribute>
 			<Attribute>
+				CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.frequencyHz
+			</Attribute>
+			<Attribute>
 				CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel
+			</Attribute>
+			<Attribute>
+				CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.isLockstep
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -1735,10 +1668,10 @@
 				CentralEcu.swUpManager.supplier
 			</Attribute>
 			<Attribute>
-				CentralEcu.swUpManager.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel
+				CentralEcu.swUpManager.Annotation_Omit.CentralEcu.CentralEcuElement.supplier
 			</Attribute>
 			<Attribute>
-				CentralEcu.swUpManager.Annotation_Omit.CentralEcu.CentralEcuElement.supplier
+				CentralEcu.swUpManager.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -1817,19 +1750,6 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="SysMLv2.Port.interface.Type" Meta="Bootstrap.Base.Fields.Type">
-		<Attributes>
-			<Attribute>
-				SysMLv2.Port.interface.Type.TypeRef
-			</Attribute>
-		</Attributes>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
 	<Entity ID="SysMLv2.Port.direction.Cardinality" Meta="Bootstrap.Base.Fields.Cardinality">
 		<Attributes>
 			<Attribute>
@@ -1883,25 +1803,13 @@
 		<Values/>
 		<InterpreterAnnotations/>
 	</Entity>
-	<Entity ID="SysMLv2.Interface.Part" Meta="SysMLv2.Part">
-		<Attributes/>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="SysMLv2.Interface" Meta="Bootstrap.Contract">
+	<Entity ID="SysMLv2.Interface" Meta="SysMLv2.Part">
 		<Attributes>
 			<Attribute>
 				SysMLv2.Interface.ports
 			</Attribute>
 			<Attribute>
 				SysMLv2.Interface.payload
-			</Attribute>
-			<Attribute>
-				SysMLv2.Interface.Part
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -1913,37 +1821,6 @@
 				SysMLv2.Interface.ports.Cardinality.Min
 			</Attribute>
 		</Attributes>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="SysMLv2.Interface.ports.Type" Meta="Bootstrap.Base.Fields.Type">
-		<Attributes>
-			<Attribute>
-				SysMLv2.Interface.ports.Type.TypeRef
-			</Attribute>
-		</Attributes>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="SysMLv2.Interface.ports.ContractSlot" Meta="Bootstrap.ContractSlot">
-		<Attributes/>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="SysMLv2.Interface.payload.ContractSlot" Meta="Bootstrap.ContractSlot">
-		<Attributes/>
 		<Values/>
 		<InterpreterAnnotations>
 			<Annotation>
@@ -2271,15 +2148,6 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInput.FinalInstance" Meta="Bootstrap.FinalInstance">
-		<Attributes/>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
 	<Entity ID="TinySWA.SensorDataInput" Meta="SysMLv2.Port">
 		<Attributes>
 			<Attribute>
@@ -2289,26 +2157,14 @@
 				TinySWA.SensorDataInput.interface
 			</Attribute>
 			<Attribute>
-				TinySWA.SensorDataInput.FinalInstance
+				TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.direction
 			</Attribute>
 			<Attribute>
 				TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.interface
 			</Attribute>
-			<Attribute>
-				TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.direction
-			</Attribute>
 		</Attributes>
 		<Values/>
 		<InterpreterAnnotations/>
-	</Entity>
-	<Entity ID="TinySWA.SensorDataOutput.FinalInstance" Meta="Bootstrap.FinalInstance">
-		<Attributes/>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="TinySWA.SensorDataOutput" Meta="SysMLv2.Port">
 		<Attributes>
@@ -2319,17 +2175,23 @@
 				TinySWA.SensorDataOutput.interface
 			</Attribute>
 			<Attribute>
-				TinySWA.SensorDataOutput.Annotation_Omit.SysMLv2.Port.interface
-			</Attribute>
-			<Attribute>
-				TinySWA.SensorDataOutput.FinalInstance
-			</Attribute>
-			<Attribute>
 				TinySWA.SensorDataOutput.Annotation_Omit.SysMLv2.Port.direction
+			</Attribute>
+			<Attribute>
+				TinySWA.SensorDataOutput.Annotation_Omit.SysMLv2.Port.interface
 			</Attribute>
 		</Attributes>
 		<Values/>
 		<InterpreterAnnotations/>
+	</Entity>
+	<Entity ID="TinySWA.task10ms.OsTask" Meta="AUTOSAR.OsTask">
+		<Attributes/>
+		<Values/>
+		<InterpreterAnnotations>
+			<Annotation>
+				AnnotationInstance
+			</Annotation>
+		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="TinySWA.task10ms" Meta="Bootstrap.Classifier">
 		<Attributes>
@@ -2338,6 +2200,9 @@
 			</Attribute>
 			<Attribute>
 				TinySWA.task10ms.ports
+			</Attribute>
+			<Attribute>
+				TinySWA.task10ms.OsTask
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2354,6 +2219,19 @@
 			</Attribute>
 			<Attribute>
 				TinySWA.task10ms.osTaskPeriod.Cardinality.Max
+			</Attribute>
+		</Attributes>
+		<Values/>
+		<InterpreterAnnotations>
+			<Annotation>
+				AnnotationInstance
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="TinySWA.task10ms.ports.Type" Meta="Bootstrap.Base.Fields.Type">
+		<Attributes>
+			<Attribute>
+				TinySWA.task10ms.ports.Type.TypeRef
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2403,21 +2281,8 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorComponent.tasks.OsTask" Meta="AUTOSAR.OsTask">
+	<Entity ID="TinySWA.task20ms.OsTask" Meta="AUTOSAR.OsTask">
 		<Attributes/>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="TinySWA.SensorComponent.tasks.Type" Meta="Bootstrap.Base.Fields.Type">
-		<Attributes>
-			<Attribute>
-				TinySWA.SensorComponent.tasks.Type.TypeRef
-			</Attribute>
-		</Attributes>
 		<Values/>
 		<InterpreterAnnotations>
 			<Annotation>
@@ -2432,6 +2297,9 @@
 			</Attribute>
 			<Attribute>
 				TinySWA.task20ms.ports
+			</Attribute>
+			<Attribute>
+				TinySWA.task20ms.OsTask
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2448,6 +2316,19 @@
 			</Attribute>
 			<Attribute>
 				TinySWA.task20ms.osTaskPeriod.Cardinality.Max
+			</Attribute>
+		</Attributes>
+		<Values/>
+		<InterpreterAnnotations>
+			<Annotation>
+				AnnotationInstance
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="TinySWA.task20ms.ports.Type" Meta="Bootstrap.Base.Fields.Type">
+		<Attributes>
+			<Attribute>
+				TinySWA.task20ms.ports.Type.TypeRef
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2475,10 +2356,10 @@
 				TinySWA.ActuatorComponent.tasks
 			</Attribute>
 			<Attribute>
-				TinySWA.ActuatorComponent.Annotation_Omit.Bootstrap.Base.Fields
+				TinySWA.ActuatorComponent.ApplicationSwC
 			</Attribute>
 			<Attribute>
-				TinySWA.ActuatorComponent.ApplicationSwC
+				TinySWA.ActuatorComponent.Annotation_Omit.Bootstrap.Base.Fields
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2521,16 +2402,16 @@
 				TinySWA.root.ports
 			</Attribute>
 			<Attribute>
-				TinySWA.root.swc1
+				TinySWA.root.aswc1
 			</Attribute>
 			<Attribute>
-				TinySWA.root.swc2
-			</Attribute>
-			<Attribute>
-				TinySWA.root.CompositionSwC
+				TinySWA.root.aswc2
 			</Attribute>
 			<Attribute>
 				TinySWA.root.FinalInstance
+			</Attribute>
+			<Attribute>
+				TinySWA.root.CompositionSwC
 			</Attribute>
 			<Attribute>
 				TinySWA.root.Annotation_Omit.Bootstrap.Base.Fields
@@ -2566,7 +2447,7 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterfaceProto" Meta="TinySWA.root">
+	<Entity ID="TinySWA.SensorDataInterfaceProto" Meta="TinySWA.base">
 		<Attributes>
 			<Attribute>
 				TinySWA.SensorDataInterfaceProto.ports
@@ -2594,7 +2475,7 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterfaceProto.ports.Type" Meta="TinySWA.root.ports.Type">
+	<Entity ID="TinySWA.SensorDataInterfaceProto.ports.Type" Meta="Bootstrap.Base.Fields.Type">
 		<Attributes>
 			<Attribute>
 				TinySWA.SensorDataInterfaceProto.ports.Type.TypeRef
@@ -2607,20 +2488,7 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterfaceProto.payload.Type" Meta="Bootstrap.Base.Fields.Type">
-		<Attributes>
-			<Attribute>
-				TinySWA.SensorDataInterfaceProto.payload.Type.TypeRef
-			</Attribute>
-		</Attributes>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="TinySWA.SensorDataInterface.FinalInstance" Meta="TinySWA.root.FinalInstance">
+	<Entity ID="TinySWA.SensorDataInterface.FinalInstance" Meta="Bootstrap.FinalInstance">
 		<Attributes/>
 		<Values/>
 		<InterpreterAnnotations>
@@ -2644,16 +2512,32 @@
 				TinySWA.SensorDataInterface.FinalInstance
 			</Attribute>
 			<Attribute>
-				TinySWA.SensorDataInterface.Annotation_Omit.Bootstrap.Base.Fields
+				TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.payload
+			</Attribute>
+			<Attribute>
+				TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.ports
 			</Attribute>
 		</Attributes>
 		<Values/>
 		<InterpreterAnnotations/>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterface.payload.Type" Meta="TinySWA.SensorDataInterfaceProto.payload.Type">
+	<Entity ID="TinySWA.SensorDataInterface.portIn.Type" Meta="TinySWA.SensorDataInterfaceProto.ports.Type">
 		<Attributes>
 			<Attribute>
-				TinySWA.SensorDataInterface.payload.Type.TypeRef
+				TinySWA.SensorDataInterface.portIn.Type.TypeRef
+			</Attribute>
+		</Attributes>
+		<Values/>
+		<InterpreterAnnotations>
+			<Annotation>
+				AnnotationInstance
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="TinySWA.SensorDataInterface.portOut.Type" Meta="TinySWA.SensorDataInterfaceProto.ports.Type">
+		<Attributes>
+			<Attribute>
+				TinySWA.SensorDataInterface.portOut.Type.TypeRef
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2694,10 +2578,10 @@
 	<Entity ID="Unittests.TestPartBase" Meta="Bootstrap.Classifier">
 		<Attributes>
 			<Attribute>
-				Unittests.TestPartBase.FalseTest
+				Unittests.TestPartBase.Part
 			</Attribute>
 			<Attribute>
-				Unittests.TestPartBase.Part
+				Unittests.TestPartBase.FalseTest
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2819,10 +2703,10 @@
 				Unittests.TestPart21.port2
 			</Attribute>
 			<Attribute>
-				Unittests.TestPart21.Annotation_Omit.Unittests.TestPart2.ports
+				Unittests.TestPart21.Test
 			</Attribute>
 			<Attribute>
-				Unittests.TestPart21.Test
+				Unittests.TestPart21.Annotation_Omit.Unittests.TestPart2.ports
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2900,13 +2784,13 @@
 				Unittests.Interface22.ports
 			</Attribute>
 			<Attribute>
-				Unittests.Interface22.Test
+				Unittests.Interface22.FinalInstance
 			</Attribute>
 			<Attribute>
 				Unittests.Interface22.Annotation_Omit.Unittests.TestPart2.ports
 			</Attribute>
 			<Attribute>
-				Unittests.Interface22.FinalInstance
+				Unittests.Interface22.Test
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2938,6 +2822,25 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
+	<Entity ID="Unittests.Interface211.FalseTest" Meta="Unittests.Interface21.FalseTest">
+		<Attributes>
+			<Attribute>
+				Unittests.Interface211.FalseTest.ErrorCode
+			</Attribute>
+			<Attribute>
+				Unittests.Interface211.FalseTest.Desc
+			</Attribute>
+			<Attribute>
+				Unittests.Interface211.FalseTest.ErrorMsg
+			</Attribute>
+		</Attributes>
+		<Values/>
+		<InterpreterAnnotations>
+			<Annotation>
+				AnnotationInstance
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
 	<Entity ID="Unittests.Interface211" Meta="Unittests.Interface21">
 		<Attributes>
 			<Attribute>
@@ -2946,14 +2849,59 @@
 			<Attribute>
 				Unittests.Interface211.Annotation_Omit.Unittests.TestPart2.ports
 			</Attribute>
+			<Attribute>
+				Unittests.Interface211.FalseTest
+			</Attribute>
 		</Attributes>
 		<Values/>
 		<InterpreterAnnotations/>
+	</Entity>
+	<Entity ID="Unittests.Interface211.ports.Cardinality" Meta="Bootstrap.Base.Fields.Cardinality">
+		<Attributes>
+			<Attribute>
+				Unittests.Interface211.ports.Cardinality.Min
+			</Attribute>
+		</Attributes>
+		<Values/>
+		<InterpreterAnnotations>
+			<Annotation>
+				AnnotationInstance
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="Unittests.Interface211.ports.Type" Meta="Unittests.TestPart2.ports.Type">
+		<Attributes>
+			<Attribute>
+				Unittests.Interface211.ports.Type.TypeRef
+			</Attribute>
+		</Attributes>
+		<Values/>
+		<InterpreterAnnotations>
+			<Annotation>
+				AnnotationInstance
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="Unittests.Interface212.Test" Meta="Unittests.TestPart2.Test">
+		<Attributes>
+			<Attribute>
+				Unittests.Interface212.Test.Desc
+			</Attribute>
+		</Attributes>
+		<Values/>
+		<InterpreterAnnotations>
+			<Annotation>
+				AnnotationInstance
+			</Annotation>
+		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="Unittests.Interface212" Meta="Unittests.Interface21">
 		<Attributes>
 			<Attribute>
 				Unittests.Interface212.ports
+			</Attribute>
+			<Attribute>
+				Unittests.Interface212.Test
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -2985,8 +2933,12 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="Unittests.Interface2111.FinalInstance" Meta="Bootstrap.FinalInstance">
-		<Attributes/>
+	<Entity ID="Unittests.Interface2111.Test" Meta="Unittests.TestPart2.Test">
+		<Attributes>
+			<Attribute>
+				Unittests.Interface2111.Test.Desc
+			</Attribute>
+		</Attributes>
 		<Values/>
 		<InterpreterAnnotations>
 			<Annotation>
@@ -3003,10 +2955,7 @@
 				Unittests.Interface2111.port2
 			</Attribute>
 			<Attribute>
-				Unittests.Interface2111.Annotation_Omit.Unittests.Interface211.ports
-			</Attribute>
-			<Attribute>
-				Unittests.Interface2111.FinalInstance
+				Unittests.Interface2111.Test
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5426,10 +5375,10 @@
 	<Entity ID="Automotive.Supplier.name" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Automotive.Supplier.name.Type
+				Automotive.Supplier.name.Cardinality
 			</Attribute>
 			<Attribute>
-				Automotive.Supplier.name.Cardinality
+				Automotive.Supplier.name.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5445,10 +5394,10 @@
 	<Entity ID="Automotive.Supplier.id" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Automotive.Supplier.id.Type
+				Automotive.Supplier.id.Cardinality
 			</Attribute>
 			<Attribute>
-				Automotive.Supplier.id.Cardinality
+				Automotive.Supplier.id.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5464,10 +5413,10 @@
 	<Entity ID="Automotive.Supplier.contactInfo" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Automotive.Supplier.contactInfo.Cardinality
+				Automotive.Supplier.contactInfo.Type
 			</Attribute>
 			<Attribute>
-				Automotive.Supplier.contactInfo.Type
+				Automotive.Supplier.contactInfo.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5483,10 +5432,10 @@
 	<Entity ID="Automotive.Supplier.alternatives" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Automotive.Supplier.alternatives.Cardinality
+				Automotive.Supplier.alternatives.Type
 			</Attribute>
 			<Attribute>
-				Automotive.Supplier.alternatives.Type
+				Automotive.Supplier.alternatives.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5505,10 +5454,10 @@
 				Automotive.AutomotiveElement.safetyLevel.Type
 			</Attribute>
 			<Attribute>
-				Automotive.AutomotiveElement.safetyLevel.Cardinality
+				Automotive.AutomotiveElement.safetyLevel.ContractSlot
 			</Attribute>
 			<Attribute>
-				Automotive.AutomotiveElement.safetyLevel.ContractSlot
+				Automotive.AutomotiveElement.safetyLevel.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5565,10 +5514,10 @@
 	<Entity ID="Automotive.AutomotiveRequirement.text" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Automotive.AutomotiveRequirement.text.Cardinality
+				Automotive.AutomotiveRequirement.text.Type
 			</Attribute>
 			<Attribute>
-				Automotive.AutomotiveRequirement.text.Type
+				Automotive.AutomotiveRequirement.text.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5584,48 +5533,10 @@
 	<Entity ID="AUTOSAR.OsTask.osTaskPeriod" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				AUTOSAR.OsTask.osTaskPeriod.ContractSlot
-			</Attribute>
-			<Attribute>
 				AUTOSAR.OsTask.osTaskPeriod.Cardinality
 			</Attribute>
-		</Attributes>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
-			</Annotation>
-			<Annotation>
-				GENERATED_ELEMENT
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="AUTOSAR.SenderReceiverIF.ports" Meta="SysMLv2.Interface.ports">
-		<Attributes>
 			<Attribute>
-				AUTOSAR.SenderReceiverIF.ports.Type
-			</Attribute>
-			<Attribute>
-				AUTOSAR.SenderReceiverIF.ports.Cardinality
-			</Attribute>
-			<Attribute>
-				AUTOSAR.SenderReceiverIF.ports.ContractSlot
-			</Attribute>
-		</Attributes>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
-			</Annotation>
-			<Annotation>
-				GENERATED_ELEMENT
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="AUTOSAR.SenderReceiverIF.payload" Meta="SysMLv2.Interface.payload">
-		<Attributes>
-			<Attribute>
-				AUTOSAR.SenderReceiverIF.payload.ContractSlot
+				AUTOSAR.OsTask.osTaskPeriod.ContractSlot
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5698,10 +5609,10 @@
 	<Entity ID="CentralEcu.CentralECU.socs" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				CentralEcu.CentralECU.socs.Type
+				CentralEcu.CentralECU.socs.Cardinality
 			</Attribute>
 			<Attribute>
-				CentralEcu.CentralECU.socs.Cardinality
+				CentralEcu.CentralECU.socs.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5787,10 +5698,10 @@
 	<Entity ID="CentralEcu.SharedMemoryInterface.ports" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				CentralEcu.SharedMemoryInterface.ports.Type
+				CentralEcu.SharedMemoryInterface.ports.Cardinality
 			</Attribute>
 			<Attribute>
-				CentralEcu.SharedMemoryInterface.ports.Cardinality
+				CentralEcu.SharedMemoryInterface.ports.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5806,10 +5717,10 @@
 	<Entity ID="CentralEcu.SoC.cores" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				CentralEcu.SoC.cores.Cardinality
+				CentralEcu.SoC.cores.Type
 			</Attribute>
 			<Attribute>
-				CentralEcu.SoC.cores.Type
+				CentralEcu.SoC.cores.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5825,10 +5736,10 @@
 	<Entity ID="CentralEcu.SoC.softwares" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				CentralEcu.SoC.softwares.Cardinality
+				CentralEcu.SoC.softwares.Type
 			</Attribute>
 			<Attribute>
-				CentralEcu.SoC.softwares.Type
+				CentralEcu.SoC.softwares.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5844,10 +5755,10 @@
 	<Entity ID="CentralEcu.SoC.memory" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				CentralEcu.SoC.memory.Cardinality
+				CentralEcu.SoC.memory.Type
 			</Attribute>
 			<Attribute>
-				CentralEcu.SoC.memory.Type
+				CentralEcu.SoC.memory.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5940,10 +5851,10 @@
 	<Entity ID="CentralEcu.Core.frequencyHz" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				CentralEcu.Core.frequencyHz.Type
+				CentralEcu.Core.frequencyHz.Cardinality
 			</Attribute>
 			<Attribute>
-				CentralEcu.Core.frequencyHz.Cardinality
+				CentralEcu.Core.frequencyHz.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5959,10 +5870,10 @@
 	<Entity ID="CentralEcu.Core.isLockstep" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				CentralEcu.Core.isLockstep.Cardinality
+				CentralEcu.Core.isLockstep.Type
 			</Attribute>
 			<Attribute>
-				CentralEcu.Core.isLockstep.Type
+				CentralEcu.Core.isLockstep.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -5997,10 +5908,10 @@
 	<Entity ID="CentralEcu.MemoryRegion.startAddress" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				CentralEcu.MemoryRegion.startAddress.Cardinality
+				CentralEcu.MemoryRegion.startAddress.Type
 			</Attribute>
 			<Attribute>
-				CentralEcu.MemoryRegion.startAddress.Type
+				CentralEcu.MemoryRegion.startAddress.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -6426,19 +6337,19 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.cr7, meta=CentralEcu.Core, attributes=[CentralEcu.cr7.supplier, CentralEcu.cr7.frequencyHz, CentralEcu.cr7.isLockstep, CentralEcu.cr7.safetyLevel, CentralEcu.cr7.Annotation_Omit.CentralEcu.Core.isLockstep, CentralEcu.cr7.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.cr7.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel, CentralEcu.cr7.Annotation_Omit.CentralEcu.CentralEcuElement.supplier], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=CentralEcu.cr7, meta=CentralEcu.Core, attributes=[CentralEcu.cr7.supplier, CentralEcu.cr7.frequencyHz, CentralEcu.cr7.isLockstep, CentralEcu.cr7.safetyLevel, CentralEcu.cr7.Annotation_Omit.CentralEcu.CentralEcuElement.supplier, CentralEcu.cr7.Annotation_Omit.CentralEcu.Core.isLockstep, CentralEcu.cr7.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.cr7.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.ca57, meta=CentralEcu.Core, attributes=[CentralEcu.ca57.supplier, CentralEcu.ca57.frequencyHz, CentralEcu.ca57.isLockstep, CentralEcu.ca57.safetyLevel, CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.isLockstep, CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.supplier, CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=CentralEcu.ca57, meta=CentralEcu.Core, attributes=[CentralEcu.ca57.supplier, CentralEcu.ca57.frequencyHz, CentralEcu.ca57.isLockstep, CentralEcu.ca57.safetyLevel, CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.supplier, CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel, CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.isLockstep], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.ca57, meta=CentralEcu.Core, attributes=[CentralEcu.ca57.supplier, CentralEcu.ca57.frequencyHz, CentralEcu.ca57.isLockstep, CentralEcu.ca57.safetyLevel, CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.isLockstep, CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.supplier, CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=CentralEcu.ca57, meta=CentralEcu.Core, attributes=[CentralEcu.ca57.supplier, CentralEcu.ca57.frequencyHz, CentralEcu.ca57.isLockstep, CentralEcu.ca57.safetyLevel, CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.supplier, CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.ca57.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel, CentralEcu.ca57.Annotation_Omit.CentralEcu.Core.isLockstep], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.ca53, meta=CentralEcu.Core, attributes=[CentralEcu.ca53.supplier, CentralEcu.ca53.frequencyHz, CentralEcu.ca53.isLockstep, CentralEcu.ca53.safetyLevel, CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.isLockstep, CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.supplier, CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=CentralEcu.ca53, meta=CentralEcu.Core, attributes=[CentralEcu.ca53.supplier, CentralEcu.ca53.frequencyHz, CentralEcu.ca53.isLockstep, CentralEcu.ca53.safetyLevel, CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.supplier, CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel, CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.isLockstep], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.ca53, meta=CentralEcu.Core, attributes=[CentralEcu.ca53.supplier, CentralEcu.ca53.frequencyHz, CentralEcu.ca53.isLockstep, CentralEcu.ca53.safetyLevel, CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.isLockstep, CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.supplier, CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=CentralEcu.ca53, meta=CentralEcu.Core, attributes=[CentralEcu.ca53.supplier, CentralEcu.ca53.frequencyHz, CentralEcu.ca53.isLockstep, CentralEcu.ca53.safetyLevel, CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.supplier, CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.frequencyHz, CentralEcu.ca53.Annotation_Omit.CentralEcu.CentralEcuElement.safetyLevel, CentralEcu.ca53.Annotation_Omit.CentralEcu.Core.isLockstep], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7062,10 +6973,10 @@
 	<Entity ID="SysMLv2.Part.ports" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				SysMLv2.Part.ports.Type
+				SysMLv2.Part.ports.ContractSlot
 			</Attribute>
 			<Attribute>
-				SysMLv2.Part.ports.ContractSlot
+				SysMLv2.Part.ports.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -7080,9 +6991,6 @@
 	</Entity>
 	<Entity ID="SysMLv2.Port.interface" Meta="Bootstrap.Base.Fields">
 		<Attributes>
-			<Attribute>
-				SysMLv2.Port.interface.Type
-			</Attribute>
 			<Attribute>
 				SysMLv2.Port.interface.Cardinality
 			</Attribute>
@@ -7116,16 +7024,10 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="SysMLv2.Interface.ports" Meta="Bootstrap.Base.Fields">
+	<Entity ID="SysMLv2.Interface.ports" Meta="SysMLv2.Part.ports">
 		<Attributes>
 			<Attribute>
 				SysMLv2.Interface.ports.Cardinality
-			</Attribute>
-			<Attribute>
-				SysMLv2.Interface.ports.Type
-			</Attribute>
-			<Attribute>
-				SysMLv2.Interface.ports.ContractSlot
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -7139,11 +7041,7 @@
 		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="SysMLv2.Interface.payload" Meta="Bootstrap.Base.Fields">
-		<Attributes>
-			<Attribute>
-				SysMLv2.Interface.payload.ContractSlot
-			</Attribute>
-		</Attributes>
+		<Attributes/>
 		<Values/>
 		<InterpreterAnnotations>
 			<Annotation>
@@ -7393,7 +7291,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=TinySWA.SensorDataInterface, meta=TinySWA.SensorDataInterfaceProto, attributes=[TinySWA.SensorDataInterface.portIn, TinySWA.SensorDataInterface.portOut, TinySWA.SensorDataInterface.payload, TinySWA.SensorDataInterface.FinalInstance, TinySWA.SensorDataInterface.Annotation_Omit.Bootstrap.Base.Fields], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=TinySWA.SensorDataInterface, meta=TinySWA.SensorDataInterfaceProto, attributes=[TinySWA.SensorDataInterface.portIn, TinySWA.SensorDataInterface.portOut, TinySWA.SensorDataInterface.payload, TinySWA.SensorDataInterface.FinalInstance, TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.payload, TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.ports], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7451,7 +7349,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=TinySWA.SensorDataInterface, meta=TinySWA.SensorDataInterfaceProto, attributes=[TinySWA.SensorDataInterface.portIn, TinySWA.SensorDataInterface.portOut, TinySWA.SensorDataInterface.payload, TinySWA.SensorDataInterface.FinalInstance, TinySWA.SensorDataInterface.Annotation_Omit.Bootstrap.Base.Fields], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=TinySWA.SensorDataInterface, meta=TinySWA.SensorDataInterfaceProto, attributes=[TinySWA.SensorDataInterface.portIn, TinySWA.SensorDataInterface.portOut, TinySWA.SensorDataInterface.payload, TinySWA.SensorDataInterface.FinalInstance, TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.payload, TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.ports], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7484,10 +7382,14 @@
 		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="TinySWA.task10ms.ports" Meta="Bootstrap.Base.Fields">
-		<Attributes/>
+		<Attributes>
+			<Attribute>
+				TinySWA.task10ms.ports.Type
+			</Attribute>
+		</Attributes>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=TinySWA.SensorDataInput, meta=SysMLv2.Port, attributes=[TinySWA.SensorDataInput.direction, TinySWA.SensorDataInput.interface, TinySWA.SensorDataInput.FinalInstance, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.interface, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=TinySWA.SensorDataOutput, meta=SysMLv2.Port, attributes=[TinySWA.SensorDataOutput.direction, TinySWA.SensorDataOutput.interface, TinySWA.SensorDataOutput.Annotation_Omit.SysMLv2.Port.direction, TinySWA.SensorDataOutput.Annotation_Omit.SysMLv2.Port.interface], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7529,15 +7431,12 @@
 		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="TinySWA.SensorComponent.tasks" Meta="Bootstrap.Base.Fields">
-		<Attributes>
-			<Attribute>
-				TinySWA.SensorComponent.tasks.OsTask
-			</Attribute>
-			<Attribute>
-				TinySWA.SensorComponent.tasks.Type
-			</Attribute>
-		</Attributes>
-		<Values/>
+		<Attributes/>
+		<Values>
+			<Value Type="Entity">
+				DmlaEntity(id=TinySWA.task10ms, meta=Bootstrap.Classifier, attributes=[TinySWA.task10ms.osTaskPeriod, TinySWA.task10ms.ports, TinySWA.task10ms.OsTask], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
+			</Value>
+		</Values>
 		<InterpreterAnnotations>
 			<Annotation>
 				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
@@ -7568,10 +7467,14 @@
 		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="TinySWA.task20ms.ports" Meta="Bootstrap.Base.Fields">
-		<Attributes/>
+		<Attributes>
+			<Attribute>
+				TinySWA.task20ms.ports.Type
+			</Attribute>
+		</Attributes>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=TinySWA.SensorDataInput, meta=SysMLv2.Port, attributes=[TinySWA.SensorDataInput.direction, TinySWA.SensorDataInput.interface, TinySWA.SensorDataInput.FinalInstance, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.interface, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=TinySWA.SensorDataInput, meta=SysMLv2.Port, attributes=[TinySWA.SensorDataInput.direction, TinySWA.SensorDataInput.interface, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.direction, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.interface], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7616,7 +7519,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=TinySWA.task20ms, meta=Bootstrap.Classifier, attributes=[TinySWA.task20ms.osTaskPeriod, TinySWA.task20ms.ports], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
+				DmlaEntity(id=TinySWA.task20ms, meta=Bootstrap.Classifier, attributes=[TinySWA.task20ms.osTaskPeriod, TinySWA.task20ms.ports, TinySWA.task20ms.OsTask], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7657,7 +7560,7 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.root.swc1" Meta="Bootstrap.Base.Fields">
+	<Entity ID="TinySWA.root.aswc1" Meta="Bootstrap.Base.Fields">
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
@@ -7673,11 +7576,11 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.root.swc2" Meta="Bootstrap.Base.Fields">
+	<Entity ID="TinySWA.root.aswc2" Meta="Bootstrap.Base.Fields">
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=TinySWA.ActuatorComponent, meta=TinySWA.base, attributes=[TinySWA.ActuatorComponent.ports, TinySWA.ActuatorComponent.tasks, TinySWA.ActuatorComponent.Annotation_Omit.Bootstrap.Base.Fields, TinySWA.ActuatorComponent.ApplicationSwC], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=TinySWA.ActuatorComponent, meta=TinySWA.base, attributes=[TinySWA.ActuatorComponent.ports, TinySWA.ActuatorComponent.tasks, TinySWA.ActuatorComponent.ApplicationSwC, TinySWA.ActuatorComponent.Annotation_Omit.Bootstrap.Base.Fields], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7689,13 +7592,13 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterfaceProto.ports" Meta="TinySWA.root.ports">
+	<Entity ID="TinySWA.SensorDataInterfaceProto.ports" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				TinySWA.SensorDataInterfaceProto.ports.Type
+				TinySWA.SensorDataInterfaceProto.ports.Cardinality
 			</Attribute>
 			<Attribute>
-				TinySWA.SensorDataInterfaceProto.ports.Cardinality
+				TinySWA.SensorDataInterfaceProto.ports.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -7709,14 +7612,10 @@
 		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="TinySWA.SensorDataInterfaceProto.payload" Meta="Bootstrap.Base.Fields">
-		<Attributes>
-			<Attribute>
-				TinySWA.SensorDataInterfaceProto.payload.Type
-			</Attribute>
-		</Attributes>
+		<Attributes/>
 		<Values>
 			<Value Type="int">
-				2026
+				2025
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7728,10 +7627,10 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterface.Annotation_Omit.Bootstrap.Base.Fields" Meta="TinySWA.root.Annotation_Omit.Bootstrap.Base.Fields">
+	<Entity ID="TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.ports" Meta="Bootstrap.Annotation_Omit">
 		<Attributes>
 			<Attribute>
-				TinySWA.SensorDataInterface.Annotation_Omit.Bootstrap.Base.Fields.EntityToOmit
+				TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.ports.EntityToOmit
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -7741,11 +7640,15 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterface.portIn" Meta="Bootstrap.Base.Fields">
-		<Attributes/>
+	<Entity ID="TinySWA.SensorDataInterface.portIn" Meta="TinySWA.SensorDataInterfaceProto.ports">
+		<Attributes>
+			<Attribute>
+				TinySWA.SensorDataInterface.portIn.Type
+			</Attribute>
+		</Attributes>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=TinySWA.SensorDataInput, meta=SysMLv2.Port, attributes=[TinySWA.SensorDataInput.direction, TinySWA.SensorDataInput.interface, TinySWA.SensorDataInput.FinalInstance, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.interface, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=TinySWA.SensorDataInput, meta=SysMLv2.Port, attributes=[TinySWA.SensorDataInput.direction, TinySWA.SensorDataInput.interface, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.direction, TinySWA.SensorDataInput.Annotation_Omit.SysMLv2.Port.interface], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7757,11 +7660,15 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterface.portOut" Meta="Bootstrap.Base.Fields">
-		<Attributes/>
+	<Entity ID="TinySWA.SensorDataInterface.portOut" Meta="TinySWA.SensorDataInterfaceProto.ports">
+		<Attributes>
+			<Attribute>
+				TinySWA.SensorDataInterface.portOut.Type
+			</Attribute>
+		</Attributes>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=TinySWA.SensorDataOutput, meta=SysMLv2.Port, attributes=[TinySWA.SensorDataOutput.direction, TinySWA.SensorDataOutput.interface, TinySWA.SensorDataOutput.Annotation_Omit.SysMLv2.Port.interface, TinySWA.SensorDataOutput.FinalInstance, TinySWA.SensorDataOutput.Annotation_Omit.SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=TinySWA.SensorDataOutput, meta=SysMLv2.Port, attributes=[TinySWA.SensorDataOutput.direction, TinySWA.SensorDataOutput.interface, TinySWA.SensorDataOutput.Annotation_Omit.SysMLv2.Port.direction, TinySWA.SensorDataOutput.Annotation_Omit.SysMLv2.Port.interface], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -7770,15 +7677,24 @@
 			</Annotation>
 			<Annotation>
 				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.payload" Meta="Bootstrap.Annotation_Omit">
+		<Attributes>
+			<Attribute>
+				TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.payload.EntityToOmit
+			</Attribute>
+		</Attributes>
+		<Values/>
+		<InterpreterAnnotations>
+			<Annotation>
+				AnnotationInstance
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="TinySWA.SensorDataInterface.payload" Meta="TinySWA.SensorDataInterfaceProto.payload">
-		<Attributes>
-			<Attribute>
-				TinySWA.SensorDataInterface.payload.Type
-			</Attribute>
-		</Attributes>
+		<Attributes/>
 		<Values>
 			<Value Type="int">
 				2026
@@ -7930,10 +7846,10 @@
 	<Entity ID="Unittests.Interface22.ports" Meta="Unittests.TestPart2.ports">
 		<Attributes>
 			<Attribute>
-				Unittests.Interface22.ports.Cardinality
+				Unittests.Interface22.ports.Type
 			</Attribute>
 			<Attribute>
-				Unittests.Interface22.ports.Type
+				Unittests.Interface22.ports.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values>
@@ -7964,7 +7880,14 @@
 		</InterpreterAnnotations>
 	</Entity>
 	<Entity ID="Unittests.Interface211.ports" Meta="Unittests.TestPart2.ports">
-		<Attributes/>
+		<Attributes>
+			<Attribute>
+				Unittests.Interface211.ports.Type
+			</Attribute>
+			<Attribute>
+				Unittests.Interface211.ports.Cardinality
+			</Attribute>
+		</Attributes>
 		<Values/>
 		<InterpreterAnnotations>
 			<Annotation>
@@ -7978,10 +7901,10 @@
 	<Entity ID="Unittests.Interface212.ports" Meta="Unittests.TestPart2.ports">
 		<Attributes>
 			<Attribute>
-				Unittests.Interface212.ports.Type
+				Unittests.Interface212.ports.Cardinality
 			</Attribute>
 			<Attribute>
-				Unittests.Interface212.ports.Cardinality
+				Unittests.Interface212.ports.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -7991,19 +7914,6 @@
 			</Annotation>
 			<Annotation>
 				GENERATED_ELEMENT
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="Unittests.Interface2111.Annotation_Omit.Unittests.Interface211.ports" Meta="Bootstrap.Annotation_Omit">
-		<Attributes>
-			<Attribute>
-				Unittests.Interface2111.Annotation_Omit.Unittests.Interface211.ports.EntityToOmit
-			</Attribute>
-		</Attributes>
-		<Values/>
-		<InterpreterAnnotations>
-			<Annotation>
-				AnnotationInstance
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
@@ -8122,10 +8032,10 @@
 	<Entity ID="Bootstrap.ValidationError.Meta" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Bootstrap.ValidationError.Meta.Type
+				Bootstrap.ValidationError.Meta.Cardinality
 			</Attribute>
 			<Attribute>
-				Bootstrap.ValidationError.Meta.Cardinality
+				Bootstrap.ValidationError.Meta.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -8184,10 +8094,10 @@
 	<Entity ID="Bootstrap.ValidationError.ErrorCode" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Bootstrap.ValidationError.ErrorCode.Type
+				Bootstrap.ValidationError.ErrorCode.Cardinality
 			</Attribute>
 			<Attribute>
-				Bootstrap.ValidationError.ErrorCode.Cardinality
+				Bootstrap.ValidationError.ErrorCode.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -8222,10 +8132,10 @@
 	<Entity ID="Bootstrap.ValidationError.InnerErrors" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Bootstrap.ValidationError.InnerErrors.Cardinality
+				Bootstrap.ValidationError.InnerErrors.Type
 			</Attribute>
 			<Attribute>
-				Bootstrap.ValidationError.InnerErrors.Type
+				Bootstrap.ValidationError.InnerErrors.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -8279,10 +8189,10 @@
 	<Entity ID="Bootstrap.Exception.Message" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Bootstrap.Exception.Message.Type
+				Bootstrap.Exception.Message.Cardinality
 			</Attribute>
 			<Attribute>
-				Bootstrap.Exception.Message.Cardinality
+				Bootstrap.Exception.Message.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -8298,10 +8208,10 @@
 	<Entity ID="Bootstrap.ValidationException.ValidationSource" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Bootstrap.ValidationException.ValidationSource.Cardinality
+				Bootstrap.ValidationException.ValidationSource.Type
 			</Attribute>
 			<Attribute>
-				Bootstrap.ValidationException.ValidationSource.Type
+				Bootstrap.ValidationException.ValidationSource.Cardinality
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -8360,10 +8270,10 @@
 	<Entity ID="Bootstrap.ValidationException.Category" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Bootstrap.ValidationException.Category.Type
+				Bootstrap.ValidationException.Category.Cardinality
 			</Attribute>
 			<Attribute>
-				Bootstrap.ValidationException.Category.Cardinality
+				Bootstrap.ValidationException.Category.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -8379,10 +8289,10 @@
 	<Entity ID="Bootstrap.ValidationException.ErrorCode" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Bootstrap.ValidationException.ErrorCode.Type
+				Bootstrap.ValidationException.ErrorCode.Cardinality
 			</Attribute>
 			<Attribute>
-				Bootstrap.ValidationException.ErrorCode.Cardinality
+				Bootstrap.ValidationException.ErrorCode.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -8609,10 +8519,10 @@
 	<Entity ID="Bootstrap.Array.BaseType" Meta="Bootstrap.Base.Fields">
 		<Attributes>
 			<Attribute>
-				Bootstrap.Array.BaseType.Type
+				Bootstrap.Array.BaseType.Cardinality
 			</Attribute>
 			<Attribute>
-				Bootstrap.Array.BaseType.Cardinality
+				Bootstrap.Array.BaseType.Type
 			</Attribute>
 		</Attributes>
 		<Values/>
@@ -12603,38 +12513,6 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="AUTOSAR.SenderReceiverIF.ports.Cardinality.Min" Meta="SysMLv2.Interface.ports.Cardinality.Min">
-		<Attributes/>
-		<Values>
-			<Value Type="int">
-				2
-			</Value>
-		</Values>
-		<InterpreterAnnotations>
-			<Annotation>
-				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
-			</Annotation>
-			<Annotation>
-				GENERATED_ELEMENT
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="AUTOSAR.SenderReceiverIF.ports.Type.TypeRef" Meta="SysMLv2.Interface.ports.Type.TypeRef">
-		<Attributes/>
-		<Values>
-			<Value Type="Entity">
-				DmlaEntity(id=SysMLv2.Port, meta=Bootstrap.Classifier, attributes=[SysMLv2.Port.interface, SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
-			</Value>
-		</Values>
-		<InterpreterAnnotations>
-			<Annotation>
-				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
-			</Annotation>
-			<Annotation>
-				GENERATED_ELEMENT
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
 	<Entity ID="CentralEcu.CentralEcuElement.safetyLevel.Cardinality.Max" Meta="Bootstrap.Base.Fields.Cardinality.Max">
 		<Attributes/>
 		<Values>
@@ -13371,22 +13249,6 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="SysMLv2.Port.interface.Type.TypeRef" Meta="Bootstrap.Base.Fields.Type.TypeRef">
-		<Attributes/>
-		<Values>
-			<Value Type="Entity">
-				DmlaEntity(id=SysMLv2.Interface, meta=Bootstrap.Contract, attributes=[SysMLv2.Interface.ports, SysMLv2.Interface.payload, SysMLv2.Interface.Part], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
-			</Value>
-		</Values>
-		<InterpreterAnnotations>
-			<Annotation>
-				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
-			</Annotation>
-			<Annotation>
-				GENERATED_ELEMENT
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
 	<Entity ID="SysMLv2.Port.direction.Cardinality.Min" Meta="Bootstrap.Base.Fields.Cardinality.Min">
 		<Attributes/>
 		<Values>
@@ -13440,22 +13302,6 @@
 		<Values>
 			<Value Type="int">
 				2
-			</Value>
-		</Values>
-		<InterpreterAnnotations>
-			<Annotation>
-				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
-			</Annotation>
-			<Annotation>
-				GENERATED_ELEMENT
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="SysMLv2.Interface.ports.Type.TypeRef" Meta="Bootstrap.Base.Fields.Type.TypeRef">
-		<Attributes/>
-		<Values>
-			<Value Type="Entity">
-				DmlaEntity(id=SysMLv2.Port, meta=Bootstrap.Classifier, attributes=[SysMLv2.Port.interface, SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -13695,7 +13541,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="int">
-				0
+				1
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -13723,6 +13569,22 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
+	<Entity ID="TinySWA.task10ms.ports.Type.TypeRef" Meta="Bootstrap.Base.Fields.Type.TypeRef">
+		<Attributes/>
+		<Values>
+			<Value Type="Entity">
+				DmlaEntity(id=SysMLv2.Port, meta=Bootstrap.Classifier, attributes=[SysMLv2.Port.interface, SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
 	<Entity ID="TinySWA.SensorComponent.ports.Type.TypeRef" Meta="Bootstrap.Base.Fields.Type.TypeRef">
 		<Attributes/>
 		<Values>
@@ -13739,27 +13601,11 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorComponent.tasks.Type.TypeRef" Meta="Bootstrap.Base.Fields.Type.TypeRef">
-		<Attributes/>
-		<Values>
-			<Value Type="Entity">
-				DmlaEntity(id=TinySWA.task10ms, meta=Bootstrap.Classifier, attributes=[TinySWA.task10ms.osTaskPeriod, TinySWA.task10ms.ports], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
-			</Value>
-		</Values>
-		<InterpreterAnnotations>
-			<Annotation>
-				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
-			</Annotation>
-			<Annotation>
-				GENERATED_ELEMENT
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
 	<Entity ID="TinySWA.task20ms.osTaskPeriod.Cardinality.Min" Meta="Bootstrap.Base.Fields.Cardinality.Min">
 		<Attributes/>
 		<Values>
 			<Value Type="int">
-				0
+				1
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -13776,6 +13622,22 @@
 		<Values>
 			<Value Type="int">
 				1
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="TinySWA.task20ms.ports.Type.TypeRef" Meta="Bootstrap.Base.Fields.Type.TypeRef">
+		<Attributes/>
+		<Values>
+			<Value Type="Entity">
+				DmlaEntity(id=SysMLv2.Port, meta=Bootstrap.Classifier, attributes=[SysMLv2.Port.interface, SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -13835,7 +13697,7 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterfaceProto.ports.Type.TypeRef" Meta="TinySWA.root.ports.Type.TypeRef">
+	<Entity ID="TinySWA.SensorDataInterfaceProto.ports.Type.TypeRef" Meta="Bootstrap.Base.Fields.Type.TypeRef">
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
@@ -13851,11 +13713,11 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterfaceProto.payload.Type.TypeRef" Meta="Bootstrap.Base.Fields.Type.TypeRef">
+	<Entity ID="TinySWA.SensorDataInterface.portIn.Type.TypeRef" Meta="TinySWA.SensorDataInterfaceProto.ports.Type.TypeRef">
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=PlatformTypes.sint16, meta=Bootstrap.Int, attributes=[], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=SysMLv2.Port, meta=Bootstrap.Classifier, attributes=[SysMLv2.Port.interface, SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -13867,11 +13729,11 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterface.payload.Type.TypeRef" Meta="TinySWA.SensorDataInterfaceProto.payload.Type.TypeRef">
+	<Entity ID="TinySWA.SensorDataInterface.portOut.Type.TypeRef" Meta="TinySWA.SensorDataInterfaceProto.ports.Type.TypeRef">
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=PlatformTypes.sint16, meta=Bootstrap.Int, attributes=[], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[])
+				DmlaEntity(id=SysMLv2.Port, meta=Bootstrap.Classifier, attributes=[SysMLv2.Port.interface, SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -14155,6 +14017,102 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
+	<Entity ID="Unittests.Interface211.FalseTest.ErrorCode" Meta="Unittests.Interface21.FalseTest.ErrorCode">
+		<Attributes/>
+		<Values>
+			<Value Type="string">
+				BS_Base_2
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="Unittests.Interface211.FalseTest.Desc" Meta="Unittests.Interface21.FalseTest.Desc">
+		<Attributes/>
+		<Values>
+			<Value Type="string">
+				Refining a @Finalinstance entity yields a validation error.
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="Unittests.Interface211.FalseTest.ErrorMsg" Meta="Unittests.Interface21.FalseTest.ErrorMsg">
+		<Attributes/>
+		<Values>
+			<Value Type="string">
+				@FinalInstance not enforced?
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="Unittests.Interface211.ports.Cardinality.Min" Meta="Bootstrap.Base.Fields.Cardinality.Min">
+		<Attributes/>
+		<Values>
+			<Value Type="int">
+				2
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="Unittests.Interface211.ports.Type.TypeRef" Meta="Unittests.TestPart2.ports.Type.TypeRef">
+		<Attributes/>
+		<Values>
+			<Value Type="Entity">
+				DmlaEntity(id=SysMLv2.Port, meta=Bootstrap.Classifier, attributes=[SysMLv2.Port.interface, SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="Unittests.Interface212.Test.Desc" Meta="Unittests.TestPart2.Test.Desc">
+		<Attributes/>
+		<Values>
+			<Value Type="string">
+				Ports slot cardinality constraint satisfied.
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
 	<Entity ID="Unittests.Interface212.ports.Cardinality.Min" Meta="Bootstrap.Base.Fields.Cardinality.Min">
 		<Attributes/>
 		<Values>
@@ -14176,6 +14134,22 @@
 		<Values>
 			<Value Type="Entity">
 				DmlaEntity(id=SysMLv2.Port, meta=Bootstrap.Classifier, attributes=[SysMLv2.Port.interface, SysMLv2.Port.direction], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[ImplicitMeta])
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="Unittests.Interface2111.Test.Desc" Meta="Unittests.TestPart2.Test.Desc">
+		<Attributes/>
+		<Values>
+			<Value Type="string">
+				Ports slot cardinality constraint satisfied.
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15055,7 +15029,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.SoC.cores, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.SoC.cores.Cardinality, CentralEcu.SoC.cores.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=CentralEcu.SoC.cores, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.SoC.cores.Type, CentralEcu.SoC.cores.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15087,7 +15061,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=Automotive.AutomotiveRequirement.text, meta=Bootstrap.Base.Fields, attributes=[Automotive.AutomotiveRequirement.text.Cardinality, Automotive.AutomotiveRequirement.text.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=Automotive.AutomotiveRequirement.text, meta=Bootstrap.Base.Fields, attributes=[Automotive.AutomotiveRequirement.text.Type, Automotive.AutomotiveRequirement.text.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15103,7 +15077,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=Automotive.AutomotiveElement.safetyLevel, meta=Bootstrap.Base.Fields, attributes=[Automotive.AutomotiveElement.safetyLevel.Type, Automotive.AutomotiveElement.safetyLevel.Cardinality, Automotive.AutomotiveElement.safetyLevel.ContractSlot], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=Automotive.AutomotiveElement.safetyLevel, meta=Bootstrap.Base.Fields, attributes=[Automotive.AutomotiveElement.safetyLevel.Type, Automotive.AutomotiveElement.safetyLevel.ContractSlot, Automotive.AutomotiveElement.safetyLevel.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15151,7 +15125,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=Automotive.Supplier.name, meta=Bootstrap.Base.Fields, attributes=[Automotive.Supplier.name.Type, Automotive.Supplier.name.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=Automotive.Supplier.name, meta=Bootstrap.Base.Fields, attributes=[Automotive.Supplier.name.Cardinality, Automotive.Supplier.name.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15167,7 +15141,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=Automotive.Supplier.name, meta=Bootstrap.Base.Fields, attributes=[Automotive.Supplier.name.Type, Automotive.Supplier.name.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=Automotive.Supplier.name, meta=Bootstrap.Base.Fields, attributes=[Automotive.Supplier.name.Cardinality, Automotive.Supplier.name.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15183,7 +15157,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=Automotive.Supplier.name, meta=Bootstrap.Base.Fields, attributes=[Automotive.Supplier.name.Type, Automotive.Supplier.name.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=Automotive.Supplier.name, meta=Bootstrap.Base.Fields, attributes=[Automotive.Supplier.name.Cardinality, Automotive.Supplier.name.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15199,7 +15173,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=Automotive.Supplier.name, meta=Bootstrap.Base.Fields, attributes=[Automotive.Supplier.name.Type, Automotive.Supplier.name.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=Automotive.Supplier.name, meta=Bootstrap.Base.Fields, attributes=[Automotive.Supplier.name.Cardinality, Automotive.Supplier.name.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15263,7 +15237,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.SoC.cores, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.SoC.cores.Cardinality, CentralEcu.SoC.cores.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=CentralEcu.SoC.cores, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.SoC.cores.Type, CentralEcu.SoC.cores.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15295,7 +15269,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.SoC.memory, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.SoC.memory.Cardinality, CentralEcu.SoC.memory.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=CentralEcu.SoC.memory, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.SoC.memory.Type, CentralEcu.SoC.memory.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15343,7 +15317,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.Core.frequencyHz, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.frequencyHz.Type, CentralEcu.Core.frequencyHz.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=CentralEcu.Core.frequencyHz, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.frequencyHz.Cardinality, CentralEcu.Core.frequencyHz.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15359,7 +15333,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.Core.isLockstep, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.isLockstep.Cardinality, CentralEcu.Core.isLockstep.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=CentralEcu.Core.isLockstep, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.isLockstep.Type, CentralEcu.Core.isLockstep.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15407,7 +15381,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.Core.frequencyHz, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.frequencyHz.Type, CentralEcu.Core.frequencyHz.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=CentralEcu.Core.frequencyHz, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.frequencyHz.Cardinality, CentralEcu.Core.frequencyHz.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15423,7 +15397,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.Core.isLockstep, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.isLockstep.Cardinality, CentralEcu.Core.isLockstep.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=CentralEcu.Core.isLockstep, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.isLockstep.Type, CentralEcu.Core.isLockstep.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15471,7 +15445,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.Core.frequencyHz, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.frequencyHz.Type, CentralEcu.Core.frequencyHz.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=CentralEcu.Core.frequencyHz, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.frequencyHz.Cardinality, CentralEcu.Core.frequencyHz.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15487,7 +15461,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=CentralEcu.Core.isLockstep, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.isLockstep.Cardinality, CentralEcu.Core.isLockstep.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=CentralEcu.Core.isLockstep, meta=Bootstrap.Base.Fields, attributes=[CentralEcu.Core.isLockstep.Type, CentralEcu.Core.isLockstep.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15663,7 +15637,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=SysMLv2.Port.interface, meta=Bootstrap.Base.Fields, attributes=[SysMLv2.Port.interface.Type, SysMLv2.Port.interface.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=SysMLv2.Port.interface, meta=Bootstrap.Base.Fields, attributes=[SysMLv2.Port.interface.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15695,7 +15669,7 @@
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=SysMLv2.Port.interface, meta=Bootstrap.Base.Fields, attributes=[SysMLv2.Port.interface.Type, SysMLv2.Port.interface.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=SysMLv2.Port.interface, meta=Bootstrap.Base.Fields, attributes=[SysMLv2.Port.interface.Cardinality], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15755,11 +15729,27 @@
 			</Annotation>
 		</InterpreterAnnotations>
 	</Entity>
-	<Entity ID="TinySWA.SensorDataInterface.Annotation_Omit.Bootstrap.Base.Fields.EntityToOmit" Meta="Bootstrap.Annotation_Omit.EntityToOmit">
+	<Entity ID="TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.ports.EntityToOmit" Meta="Bootstrap.Annotation_Omit.EntityToOmit">
 		<Attributes/>
 		<Values>
 			<Value Type="Entity">
-				DmlaEntity(id=Bootstrap.Base.Fields, meta=Bootstrap.Slot, attributes=[Bootstrap.Base.Fields.Cardinality, Bootstrap.Base.Fields.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+				DmlaEntity(id=TinySWA.SensorDataInterfaceProto.ports, meta=Bootstrap.Base.Fields, attributes=[TinySWA.SensorDataInterfaceProto.ports.Cardinality, TinySWA.SensorDataInterfaceProto.ports.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
+			</Value>
+		</Values>
+		<InterpreterAnnotations>
+			<Annotation>
+				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
+			</Annotation>
+			<Annotation>
+				GENERATED_ELEMENT
+			</Annotation>
+		</InterpreterAnnotations>
+	</Entity>
+	<Entity ID="TinySWA.SensorDataInterface.Annotation_Omit.TinySWA.SensorDataInterfaceProto.payload.EntityToOmit" Meta="Bootstrap.Annotation_Omit.EntityToOmit">
+		<Attributes/>
+		<Values>
+			<Value Type="Entity">
+				DmlaEntity(id=TinySWA.SensorDataInterfaceProto.payload, meta=Bootstrap.Base.Fields, attributes=[], values=Array&lt;ObjectType&gt;[2025], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>
@@ -15808,22 +15798,6 @@
 		<Values>
 			<Value Type="Entity">
 				DmlaEntity(id=Unittests.TestPart2.ports, meta=Bootstrap.Base.Fields, attributes=[Unittests.TestPart2.ports.Type], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
-			</Value>
-		</Values>
-		<InterpreterAnnotations>
-			<Annotation>
-				org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass
-			</Annotation>
-			<Annotation>
-				GENERATED_ELEMENT
-			</Annotation>
-		</InterpreterAnnotations>
-	</Entity>
-	<Entity ID="Unittests.Interface2111.Annotation_Omit.Unittests.Interface211.ports.EntityToOmit" Meta="Bootstrap.Annotation_Omit.EntityToOmit">
-		<Attributes/>
-		<Values>
-			<Value Type="Entity">
-				DmlaEntity(id=Unittests.Interface211.ports, meta=Unittests.TestPart2.ports, attributes=[], values=Array&lt;ObjectType&gt;[], interpreterAnnotations=[org.dmla.parser.symboldb.passes.internal.ResolveSlotMetasPass, GENERATED_ELEMENT])
 			</Value>
 		</Values>
 		<InterpreterAnnotations>

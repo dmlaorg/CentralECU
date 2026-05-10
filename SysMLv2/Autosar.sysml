@@ -73,7 +73,7 @@ package AUTOSAR {
 
     // ─── OS Task ─────────────────────────────────────────────────────
 
-    part def OsTask :> AutomotiveElement {
+    action def OsTask :> AutomotiveElement {
         doc /* An AUTOSAR OS periodic task that activates runnables on a fixed schedule.
              * Inherits safetyLevel and supplier from AutomotiveElement.
              */

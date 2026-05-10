@@ -2,7 +2,6 @@ package TinySWA
 {
     import SysMLv2
     import AUTOSAR
-    import PlatformTypes
 
     /*
      * Tiny Software Architecture - a minimal example for DMLA to SysMLv2 translation
@@ -16,14 +15,12 @@ package TinySWA
     entity base {}
 
     // ===== Port prototypes =====
-    @FinalInstance
     entity SensorDataInput : Port
     {
         slot direction = In;
         slot interface = SensorDataInterface;
     }
 
-    @FinalInstance
     entity SensorDataOutput : Port
     {
         slot direction = Out;
@@ -32,39 +29,63 @@ package TinySWA
 
     // ===== Software Component definitions =====
 
-    entity task10ms
+    @OsTask
+    entity HigherPrioTask
     {
-        @Cardinality = {Min = 0; Max = 1;}
+        @Cardinality = {Min = 1; Max = 1;}
         new slot osTaskPeriod = 10;
         
-        new slot ports = SensorDataInput;
+        @Type = {TypeRef = Port;}
+        new slot ports;
+    }
+
+    entity task10ms_sr : SensorDataOutput {}
+    
+    entity task10ms : HigherPrioTask
+    {
+        @Type = {TypeRef = Port;}
+        new slot task10mPort : ports = task10ms_sr;
     }
 
     @ApplicationSwC
     entity SensorComponent : base
     {
         @Type = {TypeRef = Port;}
-        slot ports;
-
-        @OsTask
-        @Type = {TypeRef = task10ms;}
-        new slot tasks;
+        new slot ports;
     }
 
-    entity task20ms
+    entity aswc1 : SensorComponent 
     {
-        @Cardinality = {Min = 0; Max = 1;}
+        new slot tasks = task10ms;
+    }
+
+    @OsTask
+    entity LowerPrioTask
+    {
+        @Cardinality = {Min = 1; Max = 1;}
         new slot osTaskPeriod = 20;
         
+        @Type = {TypeRef = Port;}
         new slot ports = SensorDataInput;
+    }
+    
+    entity task20ms_sr : SensorDataInput {}
+
+    entity task20ms : LowerPrioTask
+    {
+        @Type = {TypeRef = Port;}
+        new slot task20mPort : ports = task20ms_sr;
     }
 
     @ApplicationSwC
     entity ActuatorComponent : base
     {
         @Type = {TypeRef = Port;}
-        slot ports;
+        new slot ports;
+    }
 
+    entity aswc2 : ActuatorComponent 
+    {
         new slot tasks = task20ms;
     }
 
@@ -75,32 +96,33 @@ package TinySWA
         @Type = {TypeRef = Port;}
         slot ports;
 
-        new slot swc1 = SensorComponent;
-        new slot swc2 = ActuatorComponent;
+        new slot aswc1 = aswc1;
+        new slot aswc2 = aswc2;
     }
 
     entity rootAfterFinalInstance : root {}
 
     // ===== Interface definition =====
     @SenderReceiverIF
-    entity SensorDataInterfaceProto : root
+    entity SensorDataInterfaceProto : base
     {
         @Cardinality = { Min = 2;}
         @Type = {TypeRef = Port;}
         new slot ports;
 
-        @Type = {TypeRef = sint16;}
-        new slot payload = 2026;
+        new slot payload = 2025;
     }
 
     @FinalInstance
     entity SensorDataInterface : SensorDataInterfaceProto
     {
-        slot portIn = SensorDataInput;
-        slot portOut = SensorDataOutput;
+        @Type = {TypeRef = Port;}
+        slot portIn : ports = task20ms_sr;
+        
+        @Type = {TypeRef = Port;}
+        slot portOut : ports = task10ms_sr;
 
-        @Type = {TypeRef = sint16;}
-        new slot payload = 2026;
+        slot payload = 2026;
     }
 
     // ===== Code Generation Demo Operation =====
@@ -112,7 +134,7 @@ package TinySWA
         PrintLn("========================================", "red");
         PrintLn("");
 
-        String code = GenerateCode(root);
+        String code = GenerateCode(base);
         PrintLn(code);
 
         PrintLn("");

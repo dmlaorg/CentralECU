@@ -1,33 +1,20 @@
 package AUTOSAR
 {
-    import SysMLv2
+   import SysMLv2
 
-    /*
-     *
-     * 											AUTOSAR building blocks
-     * 										----------------------------
-     */
-
-     entity CompositionSwC : Part {}
-     entity ApplicationSwC : Part {}
-
-     @Part
-     entity OsTask  
-     { 
-        @Cardinality = {Min = 0; Max = 1;}
-        @ContractSlot
-        new slot osTaskPeriod; // Not applicable for non-periodic tasks
-     }
-
-     entity SenderReceiverIF : Interface
-     {
-        @Cardinality = { Min = 2;}
-        @Type = {TypeRef = Port;}
-        @ContractSlot
-        new slot ports;
-
-        @ContractSlot
-        new slot payload;
-    }
-     entity ClientServerIF : Interface {}
+   /*
+    *
+    * 											AUTOSAR building blocks
+    * 										----------------------------
+    */
+   entity CompositionSwC : Part {}
+   entity ApplicationSwC : Part {}
+   entity OsTask : Part  
+   { 
+      @Cardinality = {Min = 0; Max = 1;}
+      @ContractSlot
+      new slot osTaskPeriod; // Not applicable for non-periodic tasks
+   }
+   entity SenderReceiverIF : Interface {}
+   entity ClientServerIF : Interface {}
 }

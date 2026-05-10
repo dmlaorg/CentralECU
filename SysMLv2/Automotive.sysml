@@ -1,8 +1,5 @@
 package Automotive {
     
-    private import SysML;
-    private import SysML::Systems::*;
-    private import SysML::RequirementUsage::*;
     private import ScalarValues::*; 
     private import SI::s;
     private import MeasurementReferences::ConversionByPrefix; 

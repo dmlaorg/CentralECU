@@ -109,7 +109,7 @@ package BrakeControlSw {
 
     // ─── Periodic OS Tasks with Runnable-to-Task Mapping ─────────────
 
-    part task10ms : OsTask {
+    action task10ms : OsTask {
         doc /* 10 ms high-priority task for safety-critical brake runnables. */
         :>> osTaskPeriod { :>> period = 10 [ms]; }
         :>> osTaskPriority = 5;
@@ -123,7 +123,7 @@ package BrakeControlSw {
         first controlCycle then applyBrake;
     }
 
-    part task100ms : OsTask {
+    action task100ms : OsTask {
         doc /* 100 ms lower-priority task for diagnostic runnables. */
         :>> osTaskPeriod { :>> period = 100 [ms]; }
         :>> osTaskPriority = 3;
