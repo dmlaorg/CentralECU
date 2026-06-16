@@ -21,7 +21,8 @@ def collect_requirements(model):
     ]
     return requirements
 
-def evaluate_requirements(requirements, compiler):
+def evaluate_requirements(requirements):
+    compiler = syside.Compiler()
     for req in requirements:
         value, report = compiler.evaluate(
             req, stdlib=STANDARD_LIBRARY, experimental_quantities=True
@@ -37,9 +38,8 @@ def main():
     import os
     sys.path.append(os.path.dirname(__file__))
     model, _ = syside.load_model(MODEL_FILE_PATHS)
-    compiler = syside.Compiler()
     requirements = collect_requirements(model)
-    evaluate_requirements(requirements, compiler)
+    evaluate_requirements(requirements)
 
 if __name__ == "__main__":
     main()
