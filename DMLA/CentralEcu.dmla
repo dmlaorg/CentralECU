@@ -222,8 +222,8 @@ package CentralEcu
     entity ca53 : Core 
     {
         slot supplier = Arm;
-        slot frequencyHz = 1500000000;
         // validation logic catches type non-conformity: Int vs Real
+        slot frequencyHz = 1500000000;
         slot isLockstep = false;
         slot safetyLevel = ASIL_B;
     }

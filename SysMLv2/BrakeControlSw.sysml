@@ -57,20 +57,20 @@ package BrakeControlSw {
 
     action def ReadWheelSpeedRunnable :> Runnable {
         doc /* Reads raw wheel speed from sensor hardware. */
-        out item reading : WheelSpeedData;
+        out attribute reading : WheelSpeedData;
 
         :>> wcet = 5 [ms];
     }
 
     action def BrakeControlRunnable :> Runnable {
         doc /* Computes brake force from wheel speed input. */
-        in item wheelSpeed : WheelSpeedData;
-        out item brakeCmd : BrakeForceCommand;
+        in  wheelSpeed : WheelSpeedData;
+        out attribute brakeCmd : BrakeForceCommand;
     }
 
     action def ApplyBrakeRunnable :> Runnable {
         doc /* Applies brake force command to actuator hardware. */
-        in item cmd : BrakeForceCommand;
+        in attribute cmd : BrakeForceCommand;
     }
 
     action def DiagServiceRunnable :> Runnable {
@@ -113,8 +113,6 @@ package BrakeControlSw {
         doc /* 10 ms high-priority task for safety-critical brake runnables. */
         :>> osTaskPeriod { :>> period = 10 [ms]; }
         :>> osTaskPriority = 5;
-        :>> safetyLevel = ASIL::ASIL_D;
-        :>> supplier.name = "OsVendor";
 
         action readSpeed : ReadWheelSpeedRunnable;
         action controlCycle : BrakeControlRunnable;
@@ -127,8 +125,6 @@ package BrakeControlSw {
         doc /* 100 ms lower-priority task for diagnostic runnables. */
         :>> osTaskPeriod { :>> period = 100 [ms]; }
         :>> osTaskPriority = 3;
-        :>> safetyLevel = ASIL::ASIL_B;
-        :>> supplier.name = "OsVendor";
 
         action diagHandler : DiagServiceRunnable;
     }

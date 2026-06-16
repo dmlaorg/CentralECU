@@ -4,8 +4,18 @@ package CentralEcu {
     private import Automotive::*;
     private import SequenceFunctions::size;
 
-    requirement <'VCnumber123'> MinimumNumberOfMemoryBanks : AutomotiveRequirement {
+    requirement def <'VCnumber123'> MinimumNumberOfMemoryBanks :> AutomotiveRequirement {
         doc /* The system shall have at least two separate non-volatile memory banks. */
+
+        subject soc : SoC;
+        attribute memBanksRequired : Integer = 2;
+
+        assume constraint { soc.safetyLevel > ASIL::QM }
+
+        require constraint { size(soc.memory) >= memBanksRequired }
+    }
+
+    requirement <'VCnumber124'> MinimumNumberOfMemoryBanksINT : MinimumNumberOfMemoryBanks {
         :>> id = "OTA-1-1";
         :>> text = "The system shall have at least two separate non-volatile memory banks.";
         :>> safetyLevel = ASIL::ASIL_D;
@@ -16,13 +26,6 @@ package CentralEcu {
                 :>> id = "INT-001";
                 :>> contactInfo = "Budapest, Hungary";
             }
-
-        subject soc : SoC;
-        attribute memBanksRequired : Integer = 2;
-
-        assume constraint { soc.safetylevel > ASIL::QM }
-
-        require constraint { size(soc.memory) >= memBanksRequired }
     }
 
     part def CentralEcuComposition specializes AutomotiveElement {
@@ -41,7 +44,7 @@ package CentralEcu {
         in attribute accessedMemory : MemoryRegion;
     }
 
-    interface sharedMemoryInterface {
+    interface def sharedMemoryInterface {
         end [0..*] port read : SharedMemoryPort;
         end port write  : ~SharedMemoryPort; 
 
@@ -50,7 +53,7 @@ package CentralEcu {
     }
 
     part def SoC :> CentralEcuComposition {
-        part cores : Core[1..*] nonunique; 
+        part cores : Core[1..*]; 
         //"Subsetting feature cannot be nonunique if subsetted feature is unique" warning:
         // only in Syside, pointing to `Items::Item::subparts` as unique subsetted feature
         part softwares : EmbeddedSoftware[1..*];
@@ -109,7 +112,7 @@ package CentralEcu {
         :>> safetyLevel = ASIL::ASIL_D;
         :>> supplier.name = "Arm";
         :>> frequencyHz = 800000000;
-        :>> isLockstep : Real = "true"; 
+        :>> isLockstep = true; 
         // "Not conforming types" warning by Jupyter and Syside both!
     }
 
@@ -121,7 +124,7 @@ package CentralEcu {
     }
 
     part ca53 : Core {
-        redefines safetyLevel = 0;
+        redefines safetyLevel = ASIL::ASIL_B;
         redefines supplier.name = "Arm";
         :>> frequencyHz : Integer = 1500000000;
         redefines isLockstep : Boolean = false;
@@ -141,7 +144,7 @@ package CentralEcu {
 
         part flash1 : MemoryModule {
             :>> memoryRegion {
-                :>> sizeKB = 512.1; 
+                :>> sizeKB = 512; 
                 // No "conforming types" warning in Jupyter, only in Syside!
                 :>> safetyLevel = ASIL::QM;
                 :>> supplier.name = "MemorySupplier-A";
@@ -178,8 +181,12 @@ package CentralEcu {
             consumerPort ::> socInstanceA.sharedMem to 
             supplierPort references socInstanceB.sharedMem;
 
-        satisfy MinimumNumberOfMemoryBanks by socInstanceA;
-        satisfy MinimumNumberOfMemoryBanks by socInstanceB;
+        
+        requirement socInstanceA_membanks : MinimumNumberOfMemoryBanks 
+        {
+            subject ::> socInstanceA;
+        }
+        satisfy MinimumNumberOfMemoryBanksINT by socInstanceB;
     }
-    
+
 }

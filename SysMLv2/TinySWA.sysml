@@ -3,7 +3,6 @@ package TinySWA
     private import ScalarValues::*;
     private import Automotive::*;
     private import AUTOSAR::*;
-    private import CentralEcu::*;
     private import SI::*;
 
      comment about TinySWA
@@ -22,14 +21,14 @@ package TinySWA
     {
         part aswc1 : ApplicationSwC
         {
-            part task10ms : OsTask 
+            action task10ms : OsTask 
             { 
                 :>> osTaskPeriod = 10;
             }
         }
         part aswc2 : ApplicationSwC
         {
-            part task20ms : OsTask 
+            action task20ms : OsTask 
             { 
                 :>> osTaskPeriod = 20;
             }
@@ -37,5 +36,5 @@ package TinySWA
     }
     
     interface SensorDataInterface
-        connect task10ms.sr to task20ms.sr;
+        connect root.aswc1.task10ms.sr to root.aswc2.task20ms.sr;
 }

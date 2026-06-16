@@ -73,12 +73,12 @@ package AUTOSAR {
 
     // ─── OS Task ─────────────────────────────────────────────────────
 
-    action def OsTask :> AutomotiveElement {
+    action def OsTask {
         doc /* An AUTOSAR OS periodic task that activates runnables on a fixed schedule.
              * Inherits safetyLevel and supplier from AutomotiveElement.
              */
         attribute osTaskPeriod[0..1] : Real; // Period in seconds, optional for non-periodic tasks
-        attribute osTaskEventRef[0..*] : Event;
+        ref osTaskEventRef[0..*] : Event;
         attribute osTaskPriority[1..1] : Integer;
         port sr : SenderReceiverIF[0..*];
         port op : ClientServerIF[0..*];
@@ -94,7 +94,7 @@ package AUTOSAR {
         doc /* An AUTOSAR OS Application — a container for software components and tasks.
              * Inherits safetyLevel and supplier for traceability.
              */
-        attribute osAppEcucPartitionRef : EcucPartition;
+        ref osAppEcucPartitionRef : EcucPartition;
         attribute osTrusted : Boolean; // Indicates if the application is trusted (e.g., for safety-critical functions)
         ref osAppTaskRef : OsTask[0..*];
     }
