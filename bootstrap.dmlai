@@ -1,0 +1,311 @@
+//DMLA Bootstrap 3.5.1
+
+package Bootstrap{
+
+	/*
+		Built-in operations
+		-------------------
+	*/
+
+	//#region Array operations
+	operation Bool contains(Object[] list, Object attrib){}
+
+	operation void add(Object[] list, Object value){}
+
+	operation void addAll(Object[] list, Object[] value){}
+
+	operation Int count(Object[] subject){}
+
+
+	operation Int toInt(Real number){}
+
+	operation Real toReal(Int number){}
+
+
+	//#endregion
+	//#region String operations
+	operation Bool strStartsWith(String fullString, String searchString, Int startPos, Bool option)
+	{}
+	//#endregion
+	//#region Entity management operations
+	operation Base Create(Base metaEntity, Bool? createDynamic=false, String? newID = null) {}
+
+	operation Base? GetMeta(Base subject){}
+
+	operation String GetID(Base? value){}
+
+	operation String GetLocalID(Base attribute){}
+
+	operation Bool IsPrimitiveLiteral(Object subject){}
+
+	operation Base[] getInstances(Base root, Bool includeRoot){}
+
+	operation Object getSlotValue(Slot sourceObject)
+	{}
+
+	//Object initializer uses this to set the value
+	operation Base setSlotValue(Base sub, Slot? metaSlot, Object newValue )
+	{}
+	//#endregion
+	//#region Print operations
+	operation void PrintLn(Object msg="", String color = "white"){}
+
+	operation void Print(Object msg, String color = "white"){}
+
+	operation void PrintError(String errorMsg){}
+
+	operation String ToString(Object subject){}
+
+    operation void PrintEntity(Entity subject, Bool withHierarchy=false, Int level=0){}
+
+	operation void _StringTab(String msg, Int n=0){}
+
+    operation void _PrintSlots(Base subject, Bool withHierarchy, Int level)
+	{}
+
+    operation void _PrintAnnotations(Base subject, Int level){}
+	//#endregion
+	//#region Validation
+	entity ValidationError : Base {
+        @Type= {TypeRef=Base;}
+		@Cardinality = {Min = 1; Max = 1;}
+        new slot ValidationSource : Base.Fields;
+
+        @Type=  {TypeRef=Base;}
+		@Cardinality = {Min = 1; Max = 1;}
+        new slot Meta : Base.Fields;
+
+        new slot Instances : Base.Fields;
+        new slot Attributes : Base.Fields;
+
+        @Type=  {TypeRef=String;}
+        @Cardinality = {Min = 0; Max = 1;}
+        new slot Category : Base.Fields;
+
+        @Type=  {TypeRef=String;}
+        @Cardinality = {Min = 1; Max = 1;}
+        new slot ErrorCode : Base.Fields;
+
+        @Type=  {TypeRef=String;}
+        @Cardinality = {Min = 1; Max = 1;}
+        new slot Message : Base.Fields;
+
+		@Type=  {TypeRef=ValidationError;}
+        @Cardinality = {Min = 0; Max = -1;}
+        new slot InnerErrors : Base.Fields;		
+    }
+
+    operation ValidationError[] ValidateSelf(Base subject) {}
+
+	//Grants that all validations are called along the meta-chain
+	//Requires the metaEntity
+	operation ValidationError[] ValidateGlobal(Base metaEntity, Object subject, Base? context){}
+
+	operation void ValidateAll() {}
+	//#endregion
+
+	operation Int Int_MAX() {}
+
+	operation Real Real_MAX() {}
+
+
+	/*
+		Base entities
+		-------------------
+	*/
+
+	entity Base {
+		@Type = {TypeRef= Base;} 
+		@Cardinality = {Min = 0; Max = -1;}
+		slot Fields;
+
+		@Type = {TypeRef = OperationDefinition;}
+		@Cardinality = {Min = 0; Max = -1;}
+		slot Operations;
+
+		operation ValidationError[] Validate(Object subject, Base? context=null) {}
+	
+
+	operation ValidationError[] ValidateGamma(){}
+		
+	operation Bool isTransitiveInstance(Base meta, Bool includeSelf=false) {}
+
+	operation Base? FindMeta(Base metaMetaEntity)
+	{}
+
+	//TODO: We cannot turn off the feature "search by contract slot" currently
+	operation Base? GetAttributeByType(Base typeToFind, Bool transitiveAnnotations = true, Bool searchForContractSlot=false) {}
+
+		operation Slot[] GetAllSlots(Bool onMetaChain=true) {}
+
+		operation Base[] GetAllAttributesByType(Base typeToFind) {}
+
+		operation Base getOrCreateInstanceSlot(Slot? metaSlot, String? newSlotName=null, Bool omitMetaSlot=true){}
+
+		operation Base Set(Slot? metaSlot, Object newValue) {}
+
+		operation Base SetMany(Slot? metaSlot, Object[] newValue) {}
+
+		operation Base Divide(Slot metaSlot, String newSlotName, Object? newValue=null) {}
+
+		operation Object? Get(Slot? metaSlot){}
+
+		operation Object[] GetAll(Slot? metaSlot) {}
+
+		operation Base AddValue(Slot? metaSlot, Object newValue) {}
+
+		operation Base AddValues(Slot? metaSlot, Object[] newValue) {}
+
+		operation Base RemoveValue(Slot? metaSlot, Object valueToRemove) {}
+
+		operation Base AddAnnotation(Annotation annotation) {}
+
+		operation Base CreateAnnotation(Annotation annotation) {}
+
+		operation Bool HasAnnotation(Constraint annotationToFind, Bool transitiveAnnotations=true) {}
+		
+		operation Base AddTypeConstraint(Base typeToSet){}
+	}
+				
+	entity Slot: Base {
+		override operation ValidationError[] Validate(Object subject, Base? context=null) {}
+	}
+
+	// Primitive types
+	// ---------------
+	entity Basic_Type : Base {}
+	entity Bool: Basic_Type { 
+		override operation ValidationError[] Validate(Object subject, Base? context=null) {}	
+	}
+
+	entity String: Basic_Type {
+		 override operation ValidationError[] Validate(Object subject, Base? context=null) {}		
+	}
+
+	entity Int: Basic_Type {
+		 override operation ValidationError[] Validate(Object subject, Base? context=null) {}	
+	}
+
+	entity Real: Basic_Type {
+		 override operation ValidationError[] Validate(Object subject, Base? context=null) {}	
+	}
+
+	entity ObjectType: Basic_Type {}
+	entity Null: Basic_Type {}
+
+	entity Classifier : Base {
+	}
+
+	entity Exception : Classifier {        
+		@Type = {TypeRef=String;}
+		@Cardinality = {Min = 1; Max = 1;}
+        new slot Message : Base.Fields;
+    }
+	entity ValidationException : Exception {
+        @Type= {TypeRef=Base;}
+		@Cardinality = {Min = 1; Max = 1;}
+        new slot ValidationSource : Base.Fields;
+
+        @Type=  {TypeRef=Base;}
+		@Cardinality = {Min = 1; Max = 1;}
+        new slot Meta : Base.Fields;
+
+        new slot Instances : Base.Fields;
+        new slot Attributes : Base.Fields;
+
+        @Type=  {TypeRef=String;}
+        @Cardinality = {Min = 0; Max = 1;}
+        new slot Category : Base.Fields;
+
+        @Type=  {TypeRef=String;}
+        @Cardinality = {Min = 1; Max = 1;}
+        new slot ErrorCode : Base.Fields;
+
+        @Type=  {TypeRef=String;}
+        @Cardinality = {Min = 1; Max = 1;}
+        new slot Message : Base.Fields;
+
+		@Type=  {TypeRef=String;}
+        @Cardinality = {Min = 0; Max = 1;}
+        new slot InnerException : Base.Fields;
+    }
+
+	entity VariableDeclarationStatement : Base {
+		slot Name;
+		slot Type;
+		slot DefaultValue;
+	}
+
+	entity OperationDefinition : Base {
+		slot ReturnType;
+		slot Parameters;
+	}
+
+	entity Annotation: Base {
+	}
+
+	entity Constraint: Annotation {
+
+		//E.g. Type constraint - slot to apply the constraint on - entity containing the slot
+		operation ValidationError[] Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{}
+	}
+
+	entity Annotation_Omit : Constraint {
+		slot EntityToOmit;
+
+		override operation ValidationError[] Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{}
+	}
+
+	entity Type: Constraint {
+		slot TypeRef;
+		
+		operation Base GetType(){}
+
+ 		override operation ValidationError[] Validate(Object subject, Base? context=null) {}
+        		
+
+		//E.g. Type constraint - slot to apply the constraint on - entity containing the slot
+		override operation ValidationError[] Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{}
+
+	}
+
+	entity Cardinality: Constraint {
+		slot Min;
+		slot Max;
+
+		operation Int GetMin(){}
+
+		operation Int GetMax()
+		{}
+
+		override operation ValidationError[] Validate(Object subject, Base? context=null) {}
+		  
+		override operation ValidationError[] Check(Base definedFor, Object appliesOn, Base? containerContext)
+		{}
+	}
+
+	entity Array : Classifier {
+        @Type= {TypeRef = Base;}
+        @Cardinality= {Min=1; Max=1;}
+        new slot BaseType : Base.Fields;
+	}
+
+
+	entity ContractSlot: Annotation {}
+	entity Contract: Constraint {
+
+        override operation ValidationError[] Check(Base definedFor, Object appliesOn, Base? containerContext) {}
+	}
+
+
+	entity FinalInstance: Constraint {
+        override operation ValidationError[] Check(Base definedFor, Object appliesOn, Base? containerContext)	{}		
+
+		operation ValidationError[] IsFinal(Object appliesOn) {}
+		
+		operation ValidationError[] CheckSlotValue(Slot s) {}
+	}
+}

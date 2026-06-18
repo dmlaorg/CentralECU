@@ -1,0 +1,4 @@
+{
+    "dsharp.experimental.useWorkspaceProvidedBootstrap": false,
+    "dsharp.dev.runtime.useProfilingInstrument": false
+}
