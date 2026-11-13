@@ -15,7 +15,6 @@ package AUTOSAR {
      *  - Software Component (SwC) hierarchy: Atomic, Composition, Application, SensorActuator, Service
      *  - Runnable entities as the smallest schedulable code units
      *  - Periodic OS tasks with explicit timing and priority
-     *  - Runtime Environment (RTE) as the communication mediator
      */
 
     // ─── Data types for inter-component communication ────────────────

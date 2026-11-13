@@ -6,6 +6,6 @@ package PlatformTypes {
      * This package defines platform types and building blocks
      */
 
-    attribute def uint8 :> Positive {}
+    attribute def uint8 :> Natural {}
     attribute def sint16 :> Integer {}
 }

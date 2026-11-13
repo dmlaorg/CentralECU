@@ -161,11 +161,12 @@ package BrakeControlSw {
         }
 
         // RTE-mediated S/R assembly connectors
-        interface sensorToController connect
+        interface connect
             sensor.wheelSpeedOut to controller.wheelSpeedIn;
 
-        interface controllerToActuator connect
-            controller.brakeCmdOut to actuator.brakeCmdIn;
+        flow of BrakeForceCommand 
+            from controller.brakeCmdOut
+            to actuator.brakeCmdIn;
 
         // RTE-mediated C/S assembly connector
         interface diagConnection connect

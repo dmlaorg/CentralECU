@@ -4,3 +4,7 @@ DMLA/unittests.dmla
 DMLA/workspace.dmla
 
 docs
+.venv
+output
+.vscode
+.vs

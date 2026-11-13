@@ -59,27 +59,7 @@ package Automotive
         }
     }
 
-    entity ConstantValue : Constraint {
-        override operation ValidationError[] Check(Base definedFor, Object appliesOn, Base? containerContext)
-        {
-			ValidationError[] result = [];
-            
-			if (getSlotValue(appliesOn) != getSlotValue(definedFor)) 
-            {
-			    add(result, Create(ValidationError, true)
-								.Set(ValidationError.ValidationSource, this)
-								.Set(ValidationError.Meta, GetMeta(this))
-								.Set(ValidationError.Instances, Base[appliesOn])
-								.Set(ValidationError.Category, "Automotive/Constant")
-								.Set(ValidationError.ErrorCode, "Constant_1")
-								.Set(ValidationError.Message, "Constant value cannot be overriden!")
-							);
-            }
-            return result;
-        }
-    }
-
-    entity QM       : ASIL { @ConstantValue slot value = 0; }
+    entity QM       : ASIL { slot value = 0; }
     entity ASIL_A   : ASIL { @ConstantValue slot value = 1; }
     entity ASIL_B   : ASIL { @ConstantValue slot value = 2; }
     entity ASIL_C   : ASIL { @ConstantValue slot value = 3; }

@@ -8,13 +8,34 @@ package AUTOSAR
     * 										----------------------------
     */
    entity CompositionSwC : Part {}
-   entity ApplicationSwC : Part {}
+   entity ApplicationSwC : Part 
+   {
+      @ContractSlot
+      @Type = {TypeRef = Port;}
+      new slot ports;
+   }
    entity OsTask : Part  
    { 
       @Cardinality = {Min = 0; Max = 1;}
       @ContractSlot
       new slot osTaskPeriod; // Not applicable for non-periodic tasks
    }
-   entity SenderReceiverIF : Interface {}
-   entity ClientServerIF : Interface {}
+   entity SenderReceiverIF : Interface
+   {
+      @Type = {TypeRef = Base;}
+      @Cardinality = {Min = 0; Max = -1;}
+      new slot dataElement : Base.Fields;
+   }
+   entity ClientServerIF : Interface 
+   {
+      @Type = {TypeRef = Bool;}
+      @Cardinality = {Min = 1; Max = 1;}
+      new slot sync : Base.Fields = false;
+
+      operation Base? Service(Base[] arguments)
+      {
+         /* A modeled Operation of a ClientServerIF */
+         return null;
+      }
+   }
 }
